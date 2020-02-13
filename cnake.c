@@ -12,25 +12,19 @@ void clear_screen() {
 void print_frame(int rows, int cols) {
     int i;
 
-    for (i = 0; i < cols; i++) {
+    for (i = 1; i <= cols; i++) {
         // Top row
         printf("\033[0;%dH-", i);
         // Bottom row
         printf("\033[%d;%dH-", rows, i);
     }
 
-    for (i = 0; i < rows; i++) {
+    for (i = 1; i <= rows; i++) {
         // Left column
         printf("\033[%d;0H|", i);
         // Right column
         printf("\033[%d;%dH|", i, cols);
     }
-
-    // Corners
-    printf("\033[0;%dH\xe2\x94\x90", cols);
-    printf("\033[%d;0H\xe2\x94\x94", rows);
-    printf("\033[%d;%dH\xe2\x94\x98", rows, cols);
-    printf("\033[0;0H\xe2\x94\x8c");
 }
 
 enum dir {
