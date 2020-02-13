@@ -94,15 +94,13 @@ void handle_input(char input, struct pos *snake) {
     }
 }
 
-void clear_snake(struct pos *snake) {
-    do {
-        printf("\033[%d;%dH ", snake->row, snake->col);
-    } while ((snake = snake->next) != NULL);
-}
-
 void move_snake(struct pos *snake, struct pos *prev) {
+    // Recursive move to start with tail
     if (snake->next != NULL)
         move_snake(snake->next, snake);
+    else
+        // Clear tail
+        printf("\033[%d;%dH ", snake->row, snake->col);
 
     if (prev != NULL) {
         snake->row = prev->row;
@@ -181,7 +179,6 @@ int main() {
 
     char buf[1]; int n;
     while (running) {
-        clear_snake(&snake);
         move_snake(&snake, NULL);
         print_candy(candy, 5);
         print_snake(&snake);
