@@ -3,7 +3,6 @@
 
 #include <termios.h> // tcgetattr/tcsetattr
 #include <fcntl.h> // fcntl
-#include <stdlib.h> // NULL
 #include <stdio.h> // setbuf
 #include <unistd.h> // STDIN_FILENO
 
