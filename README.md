@@ -13,3 +13,13 @@ $ ./cnake
 ```
 
 ![Screenshot](screenshot.png)
+
+## Roadmap
+
+- [X] Draw game on fullscreen surface
+- [X] Handle user input to control snake
+- [X] Game loop that moves snake and redraws
+- [ ] Collision detection
+- [ ] Statusbar with score and other useful stuff
+
+See issues for more details.
