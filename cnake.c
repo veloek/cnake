@@ -42,10 +42,19 @@ struct pos {
 };
 
 void print_snake(struct pos *snake) {
-    struct pos *next = snake;
-    while ((next = next->next) != NULL)
-        printf("\033[%d;%dH+", next->row, next->col);
+    // Print body
+    if (snake->next) {
+        struct pos *next = snake;
 
+        // Clear tail
+        while (next->next != NULL) next = next->next;
+
+        // Print first body part
+        next = snake->next;
+        printf("\033[%d;%dH+", next->row, next->col);
+    }
+
+    // Print head
     char head;
     switch (snake->dir) {
         case LEFT:
@@ -98,9 +107,6 @@ void move_snake(struct pos *snake, struct pos *prev) {
     // Recursive move to start with tail
     if (snake->next != NULL)
         move_snake(snake->next, snake);
-    else
-        // Clear tail
-        printf("\033[%d;%dH ", snake->row, snake->col);
 
     if (prev != NULL) {
         snake->row = prev->row;
