@@ -12,6 +12,8 @@ $ gcc -o cnake *.c
 $ ./cnake
 ```
 
+Use h, j, k and l to move around, just like in [Vim](https://www.vim.org).
+
 ![Screenshot](screenshot.png)
 
 ## Roadmap
