@@ -8,24 +8,24 @@ void clear_screen()
     printf("\033[2J");
 }
 
-void draw_frame(int rows, int cols)
+void draw_frame(int width, int height)
 {
     int i;
 
-    for (i = 1; i <= cols; i++)
+    for (i = 1; i <= width; i++)
     {
         // Top row
         printf("\033[0;%dH-", i);
         // Bottom row
-        printf("\033[%d;%dH-", rows, i);
+        printf("\033[%d;%dH-", height, i);
     }
 
-    for (i = 1; i <= rows; i++)
+    for (i = 1; i <= height; i++)
     {
         // Left column
         printf("\033[%d;0H|", i);
         // Right column
-        printf("\033[%d;%dH|", i, cols);
+        printf("\033[%d;%dH|", i, width);
     }
 }
 

@@ -8,10 +8,15 @@
 
 static t_game *game;
 
-static void initialize(t_pos *start)
+static void initialize()
 {
+    // Create snake at the center
+    t_pos *center = (t_pos*)malloc(sizeof(t_pos));
+    center->col = game->w_width / 2;
+    center->row = game->w_height/ 2;
+
     game->snake = (t_snake*)malloc(sizeof(t_snake));
-    game->snake->pos = start;
+    game->snake->pos = center;
     game->snake->dir = LEFT;
 
     // Bucket of candy
@@ -139,38 +144,33 @@ static void count_down()
 
 static void start()
 {
-    game->running = 1;
-
+    game->is_running = 1;
+    initialize();
+    draw_frame(game->w_width, game->w_height);
     count_down();
 
-    while (game->running)
+    while (game->is_running)
     {
         update();
-        usleep((2 * SECOND_IN_MIKROS) / (game->speed / 2));
+        usleep((SECOND_IN_MIKROS) / (game->speed));
     }
 }
 
 static void stop()
 {
-    game->running = 0;
+    game->is_running = 0;
     destroy();
 }
 
 t_game* new_game(int rows, int cols)
 {
     game = (t_game*)malloc(sizeof(t_game));
+    game->w_width = cols;
+    game->w_height = rows;
+    game->speed = rows/5;
+    if (game->speed > 10) game->speed = 10;
     game->start = &start;
     game->stop = &stop;
-    game->speed = rows;
-
-    // Create snake at the center
-    t_pos *pos = (t_pos*)malloc(sizeof(t_pos));
-    pos->row = rows / 2;
-    pos->col = cols / 2;
-
-    initialize(pos);
-
-    draw_frame(rows, cols);
 
     return game;
 }

@@ -5,7 +5,7 @@
 
 void clear_screen();
 
-void draw_frame(int rows, int cols);
+void draw_frame(int width, int height);
 
 void draw_snake(t_snake *snake);
 

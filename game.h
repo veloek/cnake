@@ -23,7 +23,9 @@ typedef struct t_snake {
 typedef struct {
     t_snake *snake;
     t_pos **candy;
-    int running;
+    int w_width;
+    int w_height;
+    int is_running;
     int speed;
 
     void (*start)();
