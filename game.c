@@ -122,11 +122,38 @@ static void move_snake(t_snake *snake, t_snake *prev)
     }
 }
 
+static void handle_collision()
+{
+    // Check if snake is hitting any walls
+    if (game->snake->pos->col <= 1 ||
+        game->snake->pos->col >= game->w_width ||
+        game->snake->pos->row <= 1 ||
+        game->snake->pos->row >= game->w_height)
+    {
+        game->should_restart = 1;
+    }
+
+
+    // Check if snake is eating any candy
+    for (int i=0; i < N_CANDY; i++)
+    {
+        if (game->snake->pos->col == game->candy[i]->col &&
+            game->snake->pos->row == game->candy[i]->row)
+        {
+            game->candy[0]->row = 0;
+            // TODO: Add points
+        }
+    }
+}
+
 static void update()
 {
     handle_input();
+
     clear_snake(game->snake);
     move_snake(game->snake, NULL);
+    handle_collision();
+
     draw_candy(game->candy);
     draw_snake(game->snake);
 }
