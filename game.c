@@ -185,6 +185,8 @@ static void start()
         usleep((SECOND_IN_MIKROS) / (game->speed * 2));
     }
 
+    destroy();
+
     if (game->should_restart)
     {
         game->should_restart = 0;
@@ -195,7 +197,6 @@ static void start()
 static void stop()
 {
     game->is_running = 0;
-    destroy();
 }
 
 t_game* new_game(unsigned short rows, unsigned short cols)
