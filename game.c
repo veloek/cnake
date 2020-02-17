@@ -1,5 +1,6 @@
 #include "game.h"
 #include "draw.h"
+#include "debug.h"
 
 #include <unistd.h> // usleep
 #include <stdlib.h> // malloc
@@ -130,6 +131,7 @@ static void handle_collision()
         game->snake->pos->row <= 1 ||
         game->snake->pos->row >= game->w_height)
     {
+        debug("hit wall\n");
         game->should_restart = 1;
     }
 
@@ -140,6 +142,7 @@ static void handle_collision()
         if (game->snake->pos->col == game->candy[i]->col &&
             game->snake->pos->row == game->candy[i]->row)
         {
+            debug("eat candy\n");
             game->candy[0]->row = 0;
             // TODO: Add points
         }
@@ -148,6 +151,7 @@ static void handle_collision()
 
 static void update()
 {
+    debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
     handle_input();
 
     clear_snake(game->snake);
