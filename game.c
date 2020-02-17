@@ -164,7 +164,7 @@ static void update()
 
 static void count_down()
 {
-    for (int i = 3; i > 0; i--)
+    for (int i = 3; i > 0 && game->is_running; i--)
     {
         draw_count_down(game->snake->pos, i);
         usleep(SECOND_IN_MIKROS);
