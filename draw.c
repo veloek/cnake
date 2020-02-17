@@ -41,19 +41,15 @@ void draw_snake(t_snake *snake)
     switch (snake->dir)
     {
         case LEFT:
-            snake->pos->col--;
             head = '<';
             break;
         case RIGHT:
-            snake->pos->col++;
             head = '>';
             break;
         case UP:
-            snake->pos->row--;
             head = 'A';
             break;
         case DOWN:
-            snake->pos->row++;
             head = 'V';
             break;
     }

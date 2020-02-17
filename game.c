@@ -152,7 +152,7 @@ static void start()
     while (game->is_running)
     {
         update();
-        usleep((SECOND_IN_MIKROS) / (game->speed));
+        usleep((SECOND_IN_MIKROS) / (game->speed * 2));
     }
 }
 
