@@ -63,8 +63,6 @@ static void destroy()
 
     for (int i = 0; i < N_CANDY; i++)
         free(game->candy[i]);
-
-    free(game);
 }
 
 static void handle_input()
@@ -146,13 +144,20 @@ static void start()
 {
     game->is_running = 1;
     initialize();
+    clear_screen();
     draw_frame(game->w_width, game->w_height);
     count_down();
 
-    while (game->is_running)
+    while (game->is_running && !game->should_restart)
     {
         update();
         usleep((SECOND_IN_MIKROS) / (game->speed * 2));
+    }
+
+    if (game->should_restart)
+    {
+        game->should_restart = 0;
+        start();
     }
 }
 
@@ -162,7 +167,7 @@ static void stop()
     destroy();
 }
 
-t_game* new_game(int rows, int cols)
+t_game* new_game(unsigned short rows, unsigned short cols)
 {
     game = (t_game*)malloc(sizeof(t_game));
     game->w_width = cols;

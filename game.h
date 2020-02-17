@@ -11,7 +11,7 @@ typedef enum {
 } e_dir;
 
 typedef struct {
-    int row, col;
+    unsigned short row, col;
 } t_pos;
 
 typedef struct t_snake {
@@ -23,15 +23,16 @@ typedef struct t_snake {
 typedef struct {
     t_snake *snake;
     t_pos **candy;
-    int w_width;
-    int w_height;
-    int is_running;
-    int speed;
+    unsigned short w_width;
+    unsigned short w_height;
+    unsigned char is_running;
+    unsigned char speed;
+    unsigned char should_restart;
 
     void (*start)();
     void (*stop)();
 } t_game;
 
-t_game *new_game(int rows, int cols);
+t_game *new_game(unsigned short rows, unsigned short cols);
 
 #endif
