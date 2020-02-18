@@ -3,9 +3,17 @@
 #include "debug.h"
 
 #include <unistd.h> // usleep
-#include <stdlib.h> // malloc
+#include <stdlib.h> // malloc, rand, etc.
+#include <time.h> // time
 
 #define SECOND_IN_MIKROS 1000000
+
+// Get random number between [min, max)
+static int rand_int(int min, int max)
+{
+    double r = (double)rand() / RAND_MAX;
+    return (int)(r * max) + min;
+}
 
 static t_game *game;
 
@@ -166,6 +174,36 @@ static void handle_collision()
     }
 }
 
+static void create_candy()
+{
+    int activeCandy = 0;
+    for (int i = 0; i < N_CANDY; i++)
+    {
+        if (game->candy[i]->row > 0)
+            activeCandy++;
+    }
+
+    // Create candy randomly, less often the more candy is available.
+    int r = rand_int(0, 20 * activeCandy);
+    if (r != 0 || activeCandy == N_CANDY) return;
+
+    for (int i = 0; i < N_CANDY; i++)
+    {
+        // Find a free "spot"
+        if (game->candy[i]->row == 0)
+        {
+            // Find a random position within the bounds of the frame
+            int col = rand_int(2, game->w_width - 2);
+            int row = rand_int(2, game->w_height - 2);
+            debug("adding candy[%d] at %d,%d\n", i, col, row);
+            game->candy[i]->col = col;
+            game->candy[i]->row = row;
+
+            break;
+        }
+    }
+}
+
 static void update()
 {
     debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
@@ -174,6 +212,7 @@ static void update()
     clear_snake(game->snake);
     move_snake(game->snake, NULL);
     handle_collision();
+    create_candy();
 
     draw_candy(game->candy);
     draw_snake(game->snake);
@@ -192,6 +231,7 @@ static void start()
 {
     game->is_running = 1;
     initialize();
+
     clear_screen();
     draw_frame(game->w_width, game->w_height);
     count_down();
@@ -218,6 +258,9 @@ static void stop()
 
 t_game* new_game(unsigned short rows, unsigned short cols)
 {
+    // Initialize random number generator with a unique seed
+    srand(time(NULL));
+
     game = (t_game*)malloc(sizeof(t_game));
     game->w_width = cols;
     game->w_height = rows;
