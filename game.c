@@ -249,6 +249,9 @@ static void start()
     if (game->should_restart)
     {
         game->should_restart = 0;
+        t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
+        draw_game_over(&center);
+        usleep(SECOND_IN_MIKROS);
         start();
     }
 }

@@ -17,4 +17,6 @@ void clear_candy(t_pos *candy);
 
 void draw_count_down(t_pos *pos, int n);
 
+void draw_game_over(t_pos *pos);
+
 #endif

@@ -82,3 +82,8 @@ void draw_count_down(t_pos *pos, int n)
 {
     printf("\033[%d;%dH%d", pos->row, pos->col, n);
 }
+
+void draw_game_over(t_pos *pos)
+{
+    printf("\033[%d;%dH%s", pos->row, pos->col - 4, "GAME OVER");
+}
