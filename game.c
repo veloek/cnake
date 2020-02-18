@@ -159,7 +159,7 @@ static void handle_collision()
             game->snake->pos->row == game->candy[i]->row)
         {
             debug("eat candy\n");
-            game->candy[0]->row = 0;
+            game->candy[i]->row = 0;
             grow();
             // TODO: Add points
         }
