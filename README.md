@@ -25,4 +25,4 @@ Use h, j, k and l to move around, just like in [Vim](https://www.vim.org).
 - [ ] Statusbar with score and other useful stuff
 - [ ] Fancy mode with unicode characters
 
-See issues for more details.
+See [issues](https://github.com/veloek/cnake/issues) for more details.
