@@ -72,6 +72,8 @@ static void destroy()
 
     for (int i = 0; i < N_CANDY; i++)
         free(game->candy[i]);
+
+    free(game->candy);
 }
 
 static void handle_input()
