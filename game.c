@@ -123,6 +123,22 @@ static void move_snake(t_snake *snake, t_snake *prev)
     }
 }
 
+static void grow() {
+    // Keep a reference to the old next part
+    t_snake *old_next = game->snake->next;
+
+    // Create a new next part with a link to the old
+    t_pos *new_pos = (t_pos*)malloc(sizeof(t_pos));
+    new_pos->row = old_next->pos->row;
+    new_pos->col = old_next->pos->col;
+    t_snake *new_next = (t_snake*)malloc(sizeof(t_snake));
+    new_next->pos = new_pos;
+    new_next->next = old_next;
+
+    // Update the snake's next part to new part
+    game->snake->next = new_next;
+}
+
 static void handle_collision()
 {
     // Check if snake is hitting any walls
@@ -144,6 +160,7 @@ static void handle_collision()
         {
             debug("eat candy\n");
             game->candy[0]->row = 0;
+            grow();
             // TODO: Add points
         }
     }
