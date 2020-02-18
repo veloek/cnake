@@ -148,6 +148,19 @@ static void handle_collision()
         game->should_restart = 1;
     }
 
+    // Check if snake it hitting itself
+    t_snake *body = game->snake->next;
+    do
+    {
+        if (game->snake->pos->col == body->pos->col &&
+            game->snake->pos->row == body->pos->row)
+        {
+            debug("hit body\n");
+            game->should_restart = 1;
+            break;
+        }
+    }
+    while (body = body->next);
 
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
