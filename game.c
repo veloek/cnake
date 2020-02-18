@@ -32,6 +32,7 @@ static void initialize()
     body_pos->col = game->snake->pos->col + 1;
     t_snake *body = (t_snake*)malloc(sizeof(t_snake));
     body->pos = body_pos;
+    body->next = NULL;
     game->snake->next = body;
 
     // Bucket of candy
@@ -131,6 +132,7 @@ static void grow() {
     new_pos->col = tail->pos->col;
     t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
     new_tail->pos = new_pos;
+    new_tail->next = NULL;
     tail->next = new_tail;
 }
 
