@@ -28,6 +28,13 @@ static void initialize()
     game->snake->pos = center;
     game->snake->dir = LEFT;
 
+    t_pos *body_pos = (t_pos*)malloc(sizeof(t_pos));
+    body_pos->row = game->snake->pos->row;
+    body_pos->col = game->snake->pos->col + 1;
+    t_snake *body = (t_snake*)malloc(sizeof(t_snake));
+    body->pos = body_pos;
+    game->snake->next = body;
+
     // Bucket of candy
     game->candy = (t_pos**)malloc(sizeof(t_pos*) * N_CANDY);
     for (int i = 0; i < N_CANDY; i++)
@@ -35,26 +42,6 @@ static void initialize()
         game->candy[i] = (t_pos*)malloc(sizeof(t_pos));
         game->candy[i]->row = 0;
     }
-
-    // TEMP START
-    game->candy[0]->row = 3;
-    game->candy[0]->col = 20;
-
-    t_pos *rrr = (t_pos*)malloc(sizeof(t_pos));
-    rrr->row = game->snake->pos->row;
-    rrr->col = game->snake->pos->col + 1;
-    t_snake *rrrs = (t_snake*)malloc(sizeof(t_snake));
-    rrrs->pos = rrr;
-
-    t_pos *rrr2 = (t_pos*)malloc(sizeof(t_pos));
-    rrr2->row = game->snake->pos->row;
-    rrr2->col = game->snake->pos->col + 2;
-    t_snake *rrr2s = (t_snake*)malloc(sizeof(t_snake));
-    rrr2s->pos = rrr2;
-
-    rrrs->next = rrr2s;
-    game->snake->next = rrrs;
-    // TEMP END
 }
 
 static void free_snake(t_snake *snake)
