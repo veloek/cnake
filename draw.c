@@ -29,7 +29,7 @@ void draw_frame(int width, int height)
     }
 }
 
-void draw_snake(t_snake *snake)
+void draw_snake(const t_snake *snake)
 {
     if (snake->next)
     {
@@ -56,11 +56,12 @@ void draw_snake(t_snake *snake)
     printf("\033[%d;%dH%c", snake->pos->row, snake->pos->col, head);
 }
 
-void clear_snake(t_snake *snake)
+void clear_snake(const t_snake *snake)
 {
     // Only necessary to clear tail
     while (snake->next != NULL)
         snake = snake->next;
+
     printf("\033[%d;%dH ", snake->pos->row, snake->pos->col);
 }
 
@@ -73,17 +74,17 @@ void draw_candy(t_pos **candy)
     }
 }
 
-void clear_candy(t_pos *candy)
+void clear_candy(const t_pos *candy)
 {
     printf("\033[%d;%dH ", candy->row, candy->col);
 }
 
-void draw_count_down(t_pos *pos, int n)
+void draw_count_down(const t_pos *pos, int n)
 {
     printf("\033[%d;%dH%d", pos->row, pos->col, n);
 }
 
-void draw_game_over(t_pos *pos)
+void draw_game_over(const t_pos *pos)
 {
     printf("\033[%d;%dH%s", pos->row, pos->col - 4, "GAME OVER");
 }
