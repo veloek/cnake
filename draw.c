@@ -58,11 +58,9 @@ void draw_snake(t_snake *snake)
 
 void clear_snake(t_snake *snake)
 {
-    if (snake->next != NULL)
-    {
-        while (snake->next != NULL)
-            snake = snake->next;
-    }
+    // Only necessary to clear tail
+    while (snake->next != NULL)
+        snake = snake->next;
     printf("\033[%d;%dH ", snake->pos->row, snake->pos->col);
 }
 
