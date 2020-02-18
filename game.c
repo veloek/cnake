@@ -22,8 +22,7 @@ static void initialize()
     // Create snake at the center
     t_pos *center = (t_pos*)malloc(sizeof(t_pos));
     center->col = game->w_width / 2;
-    center->row = game->w_height/ 2;
-
+    center->row = game->w_height / 2;
     game->snake = (t_snake*)malloc(sizeof(t_snake));
     game->snake->pos = center;
     game->snake->dir = LEFT;
@@ -91,18 +90,20 @@ static void handle_input()
     }
 }
 
-static void move_snake(t_snake *snake, t_snake *prev)
+static void move_snake(t_snake *snake, const t_snake *prev)
 {
     // Recursive move to start with tail
     if (snake->next != NULL)
         move_snake(snake->next, snake);
 
+    // Move part to position of prev
     if (prev != NULL) {
         snake->pos->row = prev->pos->row;
         snake->pos->col = prev->pos->col;
         return;
     }
 
+    // Move head in set direction
     switch (snake->dir)
     {
         case LEFT:
@@ -121,19 +122,16 @@ static void move_snake(t_snake *snake, t_snake *prev)
 }
 
 static void grow() {
-    // Keep a reference to the old next part
-    t_snake *old_next = game->snake->next;
+    t_snake *tail = game->snake->next;
+    while (tail->next != NULL)
+        tail = tail->next;
 
-    // Create a new next part with a link to the old
     t_pos *new_pos = (t_pos*)malloc(sizeof(t_pos));
-    new_pos->row = old_next->pos->row;
-    new_pos->col = old_next->pos->col;
-    t_snake *new_next = (t_snake*)malloc(sizeof(t_snake));
-    new_next->pos = new_pos;
-    new_next->next = old_next;
-
-    // Update the snake's next part to new part
-    game->snake->next = new_next;
+    new_pos->row = tail->pos->row;
+    new_pos->col = tail->pos->col;
+    t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
+    new_tail->pos = new_pos;
+    tail->next = new_tail;
 }
 
 static void handle_collision()
@@ -207,8 +205,10 @@ static void update()
     draw_snake(game->snake);
 }
 
-static void count_down()
+static void clear_and_count_down()
 {
+    clear_screen();
+    draw_frame(game->w_width, game->w_height);
     for (int i = 3; i > 0 && game->is_running; i--)
     {
         draw_count_down(game->snake->pos, i);
@@ -219,27 +219,26 @@ static void count_down()
 static void start()
 {
     game->is_running = 1;
+
     initialize();
+    clear_and_count_down();
 
-    clear_screen();
-    draw_frame(game->w_width, game->w_height);
-    count_down();
-
-    while (game->is_running && !game->should_restart)
+    while (game->is_running)
     {
+        if (game->should_restart)
+        {
+            game->should_restart = 0;
+            destroy();
+
+            t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
+            draw_game_over(&center);
+            usleep(SECOND_IN_MIKROS);
+
+            initialize();
+            clear_and_count_down();
+        }
         update();
         usleep((SECOND_IN_MIKROS) / (game->speed * 2));
-    }
-
-    destroy();
-
-    if (game->should_restart)
-    {
-        game->should_restart = 0;
-        t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
-        draw_game_over(&center);
-        usleep(SECOND_IN_MIKROS);
-        start();
     }
 }
 
