@@ -1,5 +1,6 @@
 #include "game.h"
 #include "draw.h"
+#include "input.h"
 #include "debug.h"
 
 #include <unistd.h> // usleep
@@ -65,33 +66,23 @@ static void destroy()
 
 static void handle_input()
 {
-    char buf[3]; int n;
-    if (!(n = read(0, buf, 3)))
-        return;
-
-    char input = buf[0];
-    if (input == '\33') // escape character (i.e. arrow keys)
-        input = buf[2]; // format: [\33, '[', 'A'|'B'|'C'|'D']
+    e_dir input = read_input();
 
     switch (input)
     {
-        case 'j':
-        case 'B':
+        case DOWN:
             if (game->snake->dir != UP)
                 game->snake->dir = DOWN;
             break;
-        case 'k':
-        case 'A':
+        case UP:
             if (game->snake->dir != DOWN)
                 game->snake->dir = UP;
             break;
-        case 'h':
-        case 'D':
+        case LEFT:
             if (game->snake->dir != RIGHT)
                 game->snake->dir = LEFT;
             break;
-        case 'l':
-        case 'C':
+        case RIGHT:
             if (game->snake->dir != LEFT)
                 game->snake->dir = RIGHT;
             break;
