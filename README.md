@@ -13,6 +13,7 @@ $ ./cnake
 ```
 
 Use h, j, k and l to move around, just like in [Vim](https://www.vim.org).
+Arrow keys are also supported, if you prefer that.
 
 ![Screenshot](screenshot.png)
 
