@@ -158,7 +158,7 @@ static void handle_collision()
             break;
         }
     }
-    while (body = body->next);
+    while ((body = body->next) != NULL);
 
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
