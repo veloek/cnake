@@ -65,26 +65,33 @@ static void destroy()
 
 static void handle_input()
 {
-    char buf[1]; int n;
-    if (!(n = read(0, buf, 1)))
+    char buf[3]; int n;
+    if (!(n = read(0, buf, 3)))
         return;
 
     char input = buf[0];
+    if (input == '\33') // escape character (i.e. arrow keys)
+        input = buf[2]; // format: [\33, '[', 'A'|'B'|'C'|'D']
+
     switch (input)
     {
         case 'j':
+        case 'B':
             if (game->snake->dir != UP)
                 game->snake->dir = DOWN;
             break;
         case 'k':
+        case 'A':
             if (game->snake->dir != DOWN)
                 game->snake->dir = UP;
             break;
         case 'h':
+        case 'D':
             if (game->snake->dir != RIGHT)
                 game->snake->dir = LEFT;
             break;
         case 'l':
+        case 'C':
             if (game->snake->dir != LEFT)
                 game->snake->dir = RIGHT;
             break;
