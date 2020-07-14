@@ -23,7 +23,7 @@ Arrow keys are also supported, if you prefer that.
 - [X] Handle user input to control snake
 - [X] Game loop that moves snake and redraws
 - [X] Collision detection
-- [ ] Statusbar with score and other useful stuff
+- [X] Statusbar with score and other useful stuff
 - [ ] Fancy mode with unicode characters
 
 See [issues](https://github.com/veloek/cnake/issues) for more details.

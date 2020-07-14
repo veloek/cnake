@@ -27,6 +27,7 @@ typedef struct {
     unsigned short w_height;
     unsigned char is_running;
     unsigned char speed;
+    unsigned int points;
     unsigned char should_restart;
 
     void (*start)();

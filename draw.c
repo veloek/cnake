@@ -88,3 +88,16 @@ void draw_game_over(const t_pos *pos)
 {
     printf("\033[%d;%dH%s", pos->row, pos->col - 4, "GAME OVER");
 }
+
+void draw_statusbar(int row, char speed, int points)
+{
+    printf("\033[%d;1H", row);
+    printf(" SPEED: %d", speed);
+    printf(" POINTS: %d", points);
+}
+
+void clear_statusbar(int row)
+{
+    printf("\033[%d;0H", row);
+    printf("\033[2K");
+}

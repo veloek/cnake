@@ -19,4 +19,8 @@ void draw_count_down(const t_pos *pos, int n);
 
 void draw_game_over(const t_pos *pos);
 
+void draw_statusbar(int row, char speed, int points);
+
+void clear_statusbar(int row);
+
 #endif

@@ -43,6 +43,8 @@ static void initialize()
         game->candy[i] = (t_pos*)malloc(sizeof(t_pos));
         game->candy[i]->row = 0;
     }
+
+    game->points = 0;
 }
 
 static void free_snake(t_snake *snake)
@@ -169,7 +171,7 @@ static void handle_collision()
             debug("eat candy\n");
             game->candy[i]->row = 0;
             grow();
-            // TODO: Add points
+            game->points += game->speed * 10;
         }
     }
 }
@@ -210,12 +212,14 @@ static void update()
     handle_input();
 
     clear_snake(game->snake);
+    clear_statusbar(game->w_height + 1);
     move_snake(game->snake, NULL);
     handle_collision();
     create_candy();
 
     draw_candy(game->candy);
     draw_snake(game->snake);
+    draw_statusbar(game->w_height + 1, game->speed, game->points);
 }
 
 static void clear_and_count_down()
@@ -267,7 +271,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 
     game = (t_game*)malloc(sizeof(t_game));
     game->w_width = cols;
-    game->w_height = rows;
+    game->w_height = rows - 1;
     game->speed = rows/5;
     if (game->speed > 10) game->speed = 10;
     game->start = &start;
