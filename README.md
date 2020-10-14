@@ -8,7 +8,7 @@ this is more of an experiment to see what can be done with ansi escape codes.
 Tested on GNU/Linux, MacOS and Windows WSL and it works surprisingly well.
 
 ```
-$ gcc -o cnake *.c
+$ make
 $ ./cnake
 ```
 
