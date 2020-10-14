@@ -1,5 +1,8 @@
 # binary
 cnake
 
+# object files
+*.o
+
 # debugging
 debug.out
