@@ -2,14 +2,16 @@
 
 > A snake clone for terminals written from scratch without any libraries
 
-Implementing snake in the terminal would be much easier with ncurses, but
-this is more of an experiment to see what can be done with ansi escape codes.
+[![run on repl.it](http://repl.it/badge/github/veloek/cnake)](https://repl.it/github/veloek/cnake)
 
-Tested on GNU/Linux, MacOS and Windows WSL and it works surprisingly well.
+Implementing snake in the terminal would probably be much easier with
+something like ncurses, but I wanted to see how far I'd get by only using ansi
+escape codes.
+
+Tested on GNU/Linux, macOS and WSL and it works surprisingly well.
 
 ```
-$ make
-$ ./cnake
+$ make && ./cnake
 ```
 
 Use h, j, k and l to move around, just like in [Vim](https://www.vim.org).
