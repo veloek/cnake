@@ -6,6 +6,7 @@
 #include <unistd.h> // usleep
 #include <stdlib.h> // malloc, rand, etc.
 #include <time.h> // time
+#include <stdio.h> // putchar
 
 #define SECOND_IN_MIKROS 1000000
 
@@ -235,6 +236,11 @@ static void clear_and_count_down()
     }
 }
 
+static void beep()
+{
+    putchar('\a');
+}
+
 static void start()
 {
     game->is_running = 1;
@@ -247,6 +253,7 @@ static void start()
         if (game->should_restart)
         {
             game->should_restart = 0;
+            beep();
 
             if (game->points > highscore)
             {
