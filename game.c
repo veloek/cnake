@@ -18,6 +18,8 @@ static int rand_int(int min, int max)
 
 static t_game *game;
 
+static int highscore;
+
 static void initialize()
 {
     // Create snake at the center
@@ -219,7 +221,7 @@ static void update()
 
     draw_candy(game->candy);
     draw_snake(game->snake);
-    draw_statusbar(game->w_height + 1, game->speed, game->points);
+    draw_statusbar(game->w_height + 1, game->speed, game->points, highscore);
 }
 
 static void clear_and_count_down()
@@ -245,6 +247,14 @@ static void start()
         if (game->should_restart)
         {
             game->should_restart = 0;
+
+            if (game->points > highscore)
+            {
+                highscore = game->points;
+                draw_statusbar(game->w_height + 1, game->speed,
+                               game->points, highscore);
+            }
+
             destroy();
 
             t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
@@ -268,6 +278,8 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 {
     // Initialize random number generator with a unique seed
     srand(time(NULL));
+
+    highscore = 0;
 
     game = (t_game*)malloc(sizeof(t_game));
     game->w_width = cols;
