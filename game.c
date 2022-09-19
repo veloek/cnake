@@ -272,7 +272,12 @@ static void start()
             clear_and_count_down();
         }
         update();
-        usleep((SECOND_IN_MIKROS) / (game->speed * 2));
+
+        // Adjust the speed based on direction (since cells are rectangular and
+        // the snake appears to move faster in vertical direction).
+        float speed_factor =
+            game->snake->dir == UP || game->snake->dir == DOWN ? 1.5 : 2;
+        usleep((SECOND_IN_MIKROS) / (game->speed * speed_factor));
     }
 }
 
