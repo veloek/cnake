@@ -20,15 +20,17 @@ typedef struct t_snake {
     struct t_snake *next;
 } t_snake;
 
+typedef unsigned char t_bool;
+
 typedef struct {
     t_snake *snake;
     t_pos **candy;
     unsigned short w_width;
     unsigned short w_height;
-    unsigned char is_running;
+    t_bool is_running;
     unsigned char speed;
     unsigned int points;
-    unsigned char should_restart;
+    t_bool should_restart;
 
     void (*start)();
     void (*stop)();
