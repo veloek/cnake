@@ -1,8 +1,14 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "game.h"
+typedef enum {
+    INPUT_LEFT,
+    INPUT_RIGHT,
+    INPUT_UP,
+    INPUT_DOWN,
+    INPUT_QUIT,
+} e_input;
 
-e_dir read_input();
+e_input read_input();
 
 #endif

@@ -71,25 +71,28 @@ static void destroy()
 
 static void handle_input()
 {
-    e_dir input = read_input();
+    e_input input = read_input();
 
     switch (input)
     {
-        case DOWN:
+        case INPUT_DOWN:
             if (game->snake->dir != UP)
                 game->snake->dir = DOWN;
             break;
-        case UP:
+        case INPUT_UP:
             if (game->snake->dir != DOWN)
                 game->snake->dir = UP;
             break;
-        case LEFT:
+        case INPUT_LEFT:
             if (game->snake->dir != RIGHT)
                 game->snake->dir = LEFT;
             break;
-        case RIGHT:
+        case INPUT_RIGHT:
             if (game->snake->dir != LEFT)
                 game->snake->dir = RIGHT;
+            break;
+        case INPUT_QUIT:
+            game->is_running = 0;
             break;
     }
 }
