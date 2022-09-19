@@ -7,6 +7,7 @@
 #define ARROW_DOWN 'B'
 #define ARROW_RIGHT 'C'
 #define ARROW_LEFT 'D'
+#define SPACE ' '
 #define ESC 0
 
 e_input read_input() {
@@ -35,6 +36,9 @@ e_input read_input() {
         case ARROW_RIGHT:
         case 'l':
             return INPUT_RIGHT;
+
+        case SPACE:
+            return INPUT_PAUSE;
 
         case ESC:
         case 'q':

@@ -48,6 +48,7 @@ static void initialize()
     }
 
     game->points = 0;
+    game->is_paused = 0;
 }
 
 static void free_snake(t_snake *snake)
@@ -76,20 +77,23 @@ static void handle_input()
     switch (input)
     {
         case INPUT_DOWN:
-            if (game->snake->dir != UP)
+            if (game->snake->dir != UP && !game->is_paused)
                 game->snake->dir = DOWN;
             break;
         case INPUT_UP:
-            if (game->snake->dir != DOWN)
+            if (game->snake->dir != DOWN && !game->is_paused)
                 game->snake->dir = UP;
             break;
         case INPUT_LEFT:
-            if (game->snake->dir != RIGHT)
+            if (game->snake->dir != RIGHT && !game->is_paused)
                 game->snake->dir = LEFT;
             break;
         case INPUT_RIGHT:
-            if (game->snake->dir != LEFT)
+            if (game->snake->dir != LEFT && !game->is_paused)
                 game->snake->dir = RIGHT;
+            break;
+        case INPUT_PAUSE:
+            game->is_paused = !game->is_paused;
             break;
         case INPUT_QUIT:
             game->is_running = 0;
@@ -214,8 +218,15 @@ static void create_candy()
 
 static void update()
 {
-    debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
     handle_input();
+
+    if (game->is_paused)
+    {
+        draw_statusbar(game->w_height + 1, game->speed, game->points, highscore, game->is_paused);
+        return;
+    }
+
+    debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
 
     clear_snake(game->snake);
     clear_statusbar(game->w_height + 1);
@@ -225,7 +236,7 @@ static void update()
 
     draw_candy(game->candy);
     draw_snake(game->snake);
-    draw_statusbar(game->w_height + 1, game->speed, game->points, highscore);
+    draw_statusbar(game->w_height + 1, game->speed, game->points, highscore, game->is_paused);
 }
 
 static void clear_and_count_down()
@@ -262,7 +273,7 @@ static void start()
             {
                 highscore = game->points;
                 draw_statusbar(game->w_height + 1, game->speed,
-                               game->points, highscore);
+                               game->points, highscore, game->is_paused);
             }
 
             destroy();
@@ -274,6 +285,7 @@ static void start()
             initialize();
             clear_and_count_down();
         }
+
         update();
 
         // Adjust the speed based on direction (since cells are rectangular and

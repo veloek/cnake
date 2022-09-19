@@ -28,6 +28,7 @@ typedef struct {
     unsigned short w_width;
     unsigned short w_height;
     t_bool is_running;
+    t_bool is_paused;
     unsigned char speed;
     unsigned int points;
     t_bool should_restart;

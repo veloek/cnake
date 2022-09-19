@@ -6,6 +6,7 @@ typedef enum {
     INPUT_RIGHT,
     INPUT_UP,
     INPUT_DOWN,
+    INPUT_PAUSE,
     INPUT_QUIT,
 } e_input;
 

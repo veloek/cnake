@@ -79,12 +79,15 @@ void draw_game_over(const t_pos *pos)
     printf("\033[%d;%dH\033[31;1m%s\033[0m", pos->row, pos->col - 4, "GAME OVER");
 }
 
-void draw_statusbar(int row, char speed, int points, int highscore)
+void draw_statusbar(int row, char speed, int points, int highscore, t_bool is_paused)
 {
     printf("\033[%d;1H", row);
     printf(" \033[4mSPEED\033[0m: %d", speed);
     printf(" \033[4mPOINTS\033[0m: %d", points);
     printf(" \033[4mHIGHSCORE\033[0m: %d", highscore);
+
+    if (is_paused)
+        printf(" \033[101m*** PAUSED ***\033[0m");
 }
 
 void clear_statusbar(int row)
