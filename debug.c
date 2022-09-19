@@ -7,6 +7,9 @@
 
 void debug(const char *format, ...)
 {
+    if (!DEBUG_ENABLED)
+        return;
+
     va_list args;
     va_start(args, format);
 
