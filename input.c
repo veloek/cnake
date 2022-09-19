@@ -5,7 +5,7 @@
 
 e_dir read_input() {
     char buf[3]; int n;
-    if (!(n = read(0, buf, 3)))
+    if ((n = read(0, buf, 3)) <= 0)
         return -1;
 
     char input = buf[0];
