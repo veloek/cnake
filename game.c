@@ -9,6 +9,7 @@
 #include <stdio.h> // putchar
 
 #define SECOND_IN_MIKROS 1000000
+#define MILLI_IN_MIKROS 1000
 
 // Get random number between [min, max)
 static int rand_int(int min, int max)
@@ -47,6 +48,7 @@ static void initialize()
         game->candy[i]->row = 0;
     }
 
+    game->speed = 1;
     game->points = 0;
     game->is_paused = 0;
 }
@@ -76,6 +78,17 @@ static void handle_input()
 
     switch (input)
     {
+        case INPUT_1: game->speed = 1; break;
+        case INPUT_2: game->speed = 2; break;
+        case INPUT_3: game->speed = 3; break;
+        case INPUT_4: game->speed = 4; break;
+        case INPUT_5: game->speed = 5; break;
+        case INPUT_6: game->speed = 6; break;
+        case INPUT_7: game->speed = 7; break;
+        case INPUT_8: game->speed = 8; break;
+        case INPUT_9: game->speed = 9; break;
+        case INPUT_0: game->speed = 10; break;
+
         case INPUT_DOWN:
             if (game->snake->dir != UP && !game->is_paused)
                 game->snake->dir = DOWN;
@@ -292,7 +305,7 @@ static void start()
         // the snake appears to move faster in vertical direction).
         float speed_factor =
             game->snake->dir == UP || game->snake->dir == DOWN ? 1.5 : 2;
-        usleep((SECOND_IN_MIKROS) / (game->speed * speed_factor));
+        usleep(200 * (MILLI_IN_MIKROS) / (game->speed * speed_factor));
     }
 }
 
@@ -311,8 +324,6 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     game = (t_game*)malloc(sizeof(t_game));
     game->w_width = cols;
     game->w_height = rows - 1;
-    game->speed = rows/5;
-    if (game->speed > 10) game->speed = 10;
     game->start = &start;
     game->stop = &stop;
 
