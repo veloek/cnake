@@ -37,10 +37,10 @@ void draw_snake(const t_snake *snake)
 {
     if (snake->next)
     {
-        printf("\033[%d;%dH\033[42m \033[0m", snake->next->pos->row, snake->next->pos->col);
+        printf("\033[%d;%dH\033[42m \033[0m", snake->next->pos.row, snake->next->pos.col);
     }
 
-    printf("\033[%d;%dH\033[102;30m \033[0m", snake->pos->row, snake->pos->col);
+    printf("\033[%d;%dH\033[102;30m \033[0m", snake->pos.row, snake->pos.col);
 }
 
 void clear_snake(const t_snake *snake)
@@ -49,7 +49,7 @@ void clear_snake(const t_snake *snake)
     while (snake->next != NULL)
         snake = snake->next;
 
-    printf("\033[%d;%dH ", snake->pos->row, snake->pos->col);
+    printf("\033[%d;%dH ", snake->pos.row, snake->pos.col);
 }
 
 void draw_candy(t_pos **candy)

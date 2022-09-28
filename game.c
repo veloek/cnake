@@ -25,16 +25,16 @@ static int highscore;
 static void initialize()
 {
     // Create snake at the center
-    t_pos *center = (t_pos*)malloc(sizeof(t_pos));
-    center->col = game->w_width / 2;
-    center->row = game->w_height / 2;
+    t_pos center;
+    center.col = game->w_width / 2;
+    center.row = game->w_height / 2;
     game->snake = (t_snake*)malloc(sizeof(t_snake));
     game->snake->pos = center;
     game->snake->dir = LEFT;
 
-    t_pos *body_pos = (t_pos*)malloc(sizeof(t_pos));
-    body_pos->row = game->snake->pos->row;
-    body_pos->col = game->snake->pos->col + 1;
+    t_pos body_pos;
+    body_pos.row = game->snake->pos.row;
+    body_pos.col = game->snake->pos.col + 1;
     t_snake *body = (t_snake*)malloc(sizeof(t_snake));
     body->pos = body_pos;
     body->next = NULL;
@@ -58,7 +58,6 @@ static void free_snake(t_snake *snake)
     if (snake->next != NULL)
         free_snake(snake->next);
 
-    free(snake->pos);
     free(snake);
 }
 
@@ -122,8 +121,8 @@ static void move_snake(t_snake *snake, const t_snake *prev)
 
     // Move part to position of prev
     if (prev != NULL) {
-        snake->pos->row = prev->pos->row;
-        snake->pos->col = prev->pos->col;
+        snake->pos.row = prev->pos.row;
+        snake->pos.col = prev->pos.col;
         return;
     }
 
@@ -131,16 +130,16 @@ static void move_snake(t_snake *snake, const t_snake *prev)
     switch (snake->dir)
     {
         case LEFT:
-            snake->pos->col--;
+            snake->pos.col--;
             break;
         case RIGHT:
-            snake->pos->col++;
+            snake->pos.col++;
             break;
         case UP:
-            snake->pos->row--;
+            snake->pos.row--;
             break;
         case DOWN:
-            snake->pos->row++;
+            snake->pos.row++;
             break;
     }
 }
@@ -150,9 +149,9 @@ static void grow() {
     while (tail->next != NULL)
         tail = tail->next;
 
-    t_pos *new_pos = (t_pos*)malloc(sizeof(t_pos));
-    new_pos->row = tail->pos->row;
-    new_pos->col = tail->pos->col;
+    t_pos new_pos;
+    new_pos.row = tail->pos.row;
+    new_pos.col = tail->pos.col;
     t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
     new_tail->pos = new_pos;
     new_tail->next = NULL;
@@ -162,10 +161,10 @@ static void grow() {
 static void handle_collision()
 {
     // Check if snake is hitting any walls
-    if (game->snake->pos->col <= 1 ||
-        game->snake->pos->col >= game->w_width ||
-        game->snake->pos->row <= 1 ||
-        game->snake->pos->row >= game->w_height)
+    if (game->snake->pos.col <= 1 ||
+        game->snake->pos.col >= game->w_width ||
+        game->snake->pos.row <= 1 ||
+        game->snake->pos.row >= game->w_height)
     {
         debug("hit wall\n");
         game->should_restart = 1;
@@ -175,8 +174,8 @@ static void handle_collision()
     t_snake *body = game->snake->next;
     do
     {
-        if (game->snake->pos->col == body->pos->col &&
-            game->snake->pos->row == body->pos->row)
+        if (game->snake->pos.col == body->pos.col &&
+            game->snake->pos.row == body->pos.row)
         {
             debug("hit body\n");
             game->should_restart = 1;
@@ -188,8 +187,8 @@ static void handle_collision()
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
     {
-        if (game->snake->pos->col == game->candy[i]->col &&
-            game->snake->pos->row == game->candy[i]->row)
+        if (game->snake->pos.col == game->candy[i]->col &&
+            game->snake->pos.row == game->candy[i]->row)
         {
             debug("eat candy\n");
             game->candy[i]->row = 0;
@@ -239,7 +238,7 @@ static void update()
         return;
     }
 
-    debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
+    debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
 
     clear_snake(game->snake);
     clear_statusbar(game->w_height + 1);
@@ -258,7 +257,7 @@ static void clear_and_count_down()
     draw_frame(game->w_width, game->w_height);
     for (int i = 3; i > 0 && game->is_running; i--)
     {
-        draw_count_down(game->snake->pos, i);
+        draw_count_down(&game->snake->pos, i);
         usleep(SECOND_IN_MIKROS);
     }
 }

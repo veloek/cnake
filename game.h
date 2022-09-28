@@ -15,7 +15,7 @@ typedef struct {
 } t_pos;
 
 typedef struct t_snake {
-    t_pos *pos;
+    t_pos pos;
     e_dir dir;
     struct t_snake *next;
 } t_snake;
