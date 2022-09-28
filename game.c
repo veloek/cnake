@@ -15,7 +15,7 @@
 static int rand_int(int min, int max)
 {
     double r = (double)rand() / RAND_MAX;
-    return (int)(r * max) + min;
+    return (int)(r * (max-min)) + min;
 }
 
 static t_game *game;
