@@ -24,7 +24,7 @@ typedef unsigned char t_bool;
 
 typedef struct {
     t_snake *snake;
-    t_pos **candy;
+    t_pos *candy;
     unsigned short w_width;
     unsigned short w_height;
     t_bool is_running;

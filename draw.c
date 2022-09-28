@@ -52,13 +52,13 @@ void clear_snake(const t_snake *snake)
     printf("\033[%d;%dH ", snake->pos.row, snake->pos.col);
 }
 
-void draw_candy(t_pos **candy)
+void draw_candy(t_pos *candy)
 {
     for (int i = 0; i < N_CANDY; i++)
     {
-        if (candy[i]->row > 0)
+        if (candy[i].row > 0)
         {
-            printf("\033[%d;%dH\033[41m \033[0m", candy[i]->row, candy[i]->col);
+            printf("\033[%d;%dH\033[41m \033[0m", candy[i].row, candy[i].col);
         }
     }
 }

@@ -41,11 +41,10 @@ static void initialize()
     game->snake->next = body;
 
     // Bucket of candy
-    game->candy = (t_pos**)malloc(sizeof(t_pos*) * N_CANDY);
+    game->candy = (t_pos*)malloc(sizeof(t_pos) * N_CANDY);
     for (int i = 0; i < N_CANDY; i++)
     {
-        game->candy[i] = (t_pos*)malloc(sizeof(t_pos));
-        game->candy[i]->row = 0;
+        game->candy[i].row = 0;
     }
 
     game->speed = 1;
@@ -64,10 +63,6 @@ static void free_snake(t_snake *snake)
 static void destroy()
 {
     free_snake(game->snake);
-
-    for (int i = 0; i < N_CANDY; i++)
-        free(game->candy[i]);
-
     free(game->candy);
 }
 
@@ -187,11 +182,11 @@ static void handle_collision()
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
     {
-        if (game->snake->pos.col == game->candy[i]->col &&
-            game->snake->pos.row == game->candy[i]->row)
+        if (game->snake->pos.col == game->candy[i].col &&
+            game->snake->pos.row == game->candy[i].row)
         {
             debug("eat candy\n");
-            game->candy[i]->row = 0;
+            game->candy[i].row = 0;
             grow();
             game->points += game->speed * 10;
         }
@@ -203,7 +198,7 @@ static void create_candy()
     int activeCandy = 0;
     for (int i = 0; i < N_CANDY; i++)
     {
-        if (game->candy[i]->row > 0)
+        if (game->candy[i].row > 0)
             activeCandy++;
     }
 
@@ -214,14 +209,14 @@ static void create_candy()
     for (int i = 0; i < N_CANDY; i++)
     {
         // Find a free "spot"
-        if (game->candy[i]->row == 0)
+        if (game->candy[i].row == 0)
         {
             // Find a random position within the bounds of the frame
             int col = rand_int(2, game->w_width - 2);
             int row = rand_int(2, game->w_height - 2);
             debug("adding candy[%d] at %d,%d\n", i, col, row);
-            game->candy[i]->col = col;
-            game->candy[i]->row = row;
+            game->candy[i].col = col;
+            game->candy[i].row = row;
 
             break;
         }
