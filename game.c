@@ -7,6 +7,7 @@
 #include <stdlib.h> // malloc, rand, etc.
 #include <time.h> // time
 #include <stdio.h> // putchar
+#include <assert.h> // assert
 
 #define SECOND_IN_MIKROS 1000000
 #define MILLI_IN_MIKROS 1000
@@ -29,6 +30,7 @@ static void initialize()
     center.col = game->w_width / 2;
     center.row = game->w_height / 2;
     game->snake = (t_snake*)malloc(sizeof(t_snake));
+    assert(game->snake);
     game->snake->pos = center;
     game->snake->dir = LEFT;
 
@@ -36,12 +38,14 @@ static void initialize()
     body_pos.row = game->snake->pos.row;
     body_pos.col = game->snake->pos.col + 1;
     t_snake *body = (t_snake*)malloc(sizeof(t_snake));
+    assert(body);
     body->pos = body_pos;
     body->next = NULL;
     game->snake->next = body;
 
     // Bucket of candy
     game->candy = (t_pos*)malloc(sizeof(t_pos) * N_CANDY);
+    assert(game->candy);
     for (int i = 0; i < N_CANDY; i++)
     {
         game->candy[i].row = 0;
@@ -148,6 +152,7 @@ static void grow() {
     new_pos.row = tail->pos.row;
     new_pos.col = tail->pos.col;
     t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
+    assert(new_tail);
     new_tail->pos = new_pos;
     new_tail->next = NULL;
     tail->next = new_tail;
@@ -316,6 +321,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     highscore = 0;
 
     game = (t_game*)malloc(sizeof(t_game));
+    assert(game);
     game->w_width = cols;
     game->w_height = rows - 1;
     game->start = &start;
