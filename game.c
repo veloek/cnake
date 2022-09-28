@@ -7,6 +7,7 @@
 #include <stdlib.h> // malloc, rand, etc.
 #include <time.h> // time
 #include <stdio.h> // putchar
+#include <assert.h> // assert
 
 #define SECOND_IN_MIKROS 1000000
 #define MILLI_IN_MIKROS 1000
@@ -15,7 +16,7 @@
 static int rand_int(int min, int max)
 {
     double r = (double)rand() / RAND_MAX;
-    return (int)(r * max) + min;
+    return (int)(r * (max-min)) + min;
 }
 
 static t_game *game;
@@ -25,27 +26,29 @@ static int highscore;
 static void initialize()
 {
     // Create snake at the center
-    t_pos *center = (t_pos*)malloc(sizeof(t_pos));
-    center->col = game->w_width / 2;
-    center->row = game->w_height / 2;
+    t_pos center;
+    center.col = game->w_width / 2;
+    center.row = game->w_height / 2;
     game->snake = (t_snake*)malloc(sizeof(t_snake));
+    assert(game->snake);
     game->snake->pos = center;
     game->snake->dir = LEFT;
 
-    t_pos *body_pos = (t_pos*)malloc(sizeof(t_pos));
-    body_pos->row = game->snake->pos->row;
-    body_pos->col = game->snake->pos->col + 1;
+    t_pos body_pos;
+    body_pos.row = game->snake->pos.row;
+    body_pos.col = game->snake->pos.col + 1;
     t_snake *body = (t_snake*)malloc(sizeof(t_snake));
+    assert(body);
     body->pos = body_pos;
     body->next = NULL;
     game->snake->next = body;
 
     // Bucket of candy
-    game->candy = (t_pos**)malloc(sizeof(t_pos*) * N_CANDY);
+    game->candy = (t_pos*)malloc(sizeof(t_pos) * N_CANDY);
+    assert(game->candy);
     for (int i = 0; i < N_CANDY; i++)
     {
-        game->candy[i] = (t_pos*)malloc(sizeof(t_pos));
-        game->candy[i]->row = 0;
+        game->candy[i].row = 0;
     }
 
     game->speed = 1;
@@ -58,17 +61,12 @@ static void free_snake(t_snake *snake)
     if (snake->next != NULL)
         free_snake(snake->next);
 
-    free(snake->pos);
     free(snake);
 }
 
 static void destroy()
 {
     free_snake(game->snake);
-
-    for (int i = 0; i < N_CANDY; i++)
-        free(game->candy[i]);
-
     free(game->candy);
 }
 
@@ -122,8 +120,8 @@ static void move_snake(t_snake *snake, const t_snake *prev)
 
     // Move part to position of prev
     if (prev != NULL) {
-        snake->pos->row = prev->pos->row;
-        snake->pos->col = prev->pos->col;
+        snake->pos.row = prev->pos.row;
+        snake->pos.col = prev->pos.col;
         return;
     }
 
@@ -131,16 +129,16 @@ static void move_snake(t_snake *snake, const t_snake *prev)
     switch (snake->dir)
     {
         case LEFT:
-            snake->pos->col--;
+            snake->pos.col--;
             break;
         case RIGHT:
-            snake->pos->col++;
+            snake->pos.col++;
             break;
         case UP:
-            snake->pos->row--;
+            snake->pos.row--;
             break;
         case DOWN:
-            snake->pos->row++;
+            snake->pos.row++;
             break;
     }
 }
@@ -150,10 +148,11 @@ static void grow() {
     while (tail->next != NULL)
         tail = tail->next;
 
-    t_pos *new_pos = (t_pos*)malloc(sizeof(t_pos));
-    new_pos->row = tail->pos->row;
-    new_pos->col = tail->pos->col;
+    t_pos new_pos;
+    new_pos.row = tail->pos.row;
+    new_pos.col = tail->pos.col;
     t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
+    assert(new_tail);
     new_tail->pos = new_pos;
     new_tail->next = NULL;
     tail->next = new_tail;
@@ -162,10 +161,10 @@ static void grow() {
 static void handle_collision()
 {
     // Check if snake is hitting any walls
-    if (game->snake->pos->col <= 1 ||
-        game->snake->pos->col >= game->w_width ||
-        game->snake->pos->row <= 1 ||
-        game->snake->pos->row >= game->w_height)
+    if (game->snake->pos.col <= 1 ||
+        game->snake->pos.col >= game->w_width ||
+        game->snake->pos.row <= 1 ||
+        game->snake->pos.row >= game->w_height)
     {
         debug("hit wall\n");
         game->should_restart = 1;
@@ -175,8 +174,8 @@ static void handle_collision()
     t_snake *body = game->snake->next;
     do
     {
-        if (game->snake->pos->col == body->pos->col &&
-            game->snake->pos->row == body->pos->row)
+        if (game->snake->pos.col == body->pos.col &&
+            game->snake->pos.row == body->pos.row)
         {
             debug("hit body\n");
             game->should_restart = 1;
@@ -188,11 +187,11 @@ static void handle_collision()
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
     {
-        if (game->snake->pos->col == game->candy[i]->col &&
-            game->snake->pos->row == game->candy[i]->row)
+        if (game->snake->pos.col == game->candy[i].col &&
+            game->snake->pos.row == game->candy[i].row)
         {
             debug("eat candy\n");
-            game->candy[i]->row = 0;
+            game->candy[i].row = 0;
             grow();
             game->points += game->speed * 10;
         }
@@ -204,7 +203,7 @@ static void create_candy()
     int activeCandy = 0;
     for (int i = 0; i < N_CANDY; i++)
     {
-        if (game->candy[i]->row > 0)
+        if (game->candy[i].row > 0)
             activeCandy++;
     }
 
@@ -215,14 +214,14 @@ static void create_candy()
     for (int i = 0; i < N_CANDY; i++)
     {
         // Find a free "spot"
-        if (game->candy[i]->row == 0)
+        if (game->candy[i].row == 0)
         {
             // Find a random position within the bounds of the frame
             int col = rand_int(2, game->w_width - 2);
             int row = rand_int(2, game->w_height - 2);
             debug("adding candy[%d] at %d,%d\n", i, col, row);
-            game->candy[i]->col = col;
-            game->candy[i]->row = row;
+            game->candy[i].col = col;
+            game->candy[i].row = row;
 
             break;
         }
@@ -239,7 +238,7 @@ static void update()
         return;
     }
 
-    debug("snake pos: %d, %d\n", game->snake->pos->col, game->snake->pos->row);
+    debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
 
     clear_snake(game->snake);
     clear_statusbar(game->w_height + 1);
@@ -258,7 +257,7 @@ static void clear_and_count_down()
     draw_frame(game->w_width, game->w_height);
     for (int i = 3; i > 0 && game->is_running; i--)
     {
-        draw_count_down(game->snake->pos, i);
+        draw_count_down(&game->snake->pos, i);
         usleep(SECOND_IN_MIKROS);
     }
 }
@@ -322,6 +321,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     highscore = 0;
 
     game = (t_game*)malloc(sizeof(t_game));
+    assert(game);
     game->w_width = cols;
     game->w_height = rows - 1;
     game->start = &start;

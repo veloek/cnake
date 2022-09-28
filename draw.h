@@ -11,7 +11,7 @@ void draw_snake(const t_snake *snake);
 
 void clear_snake(const t_snake *snake);
 
-void draw_candy(t_pos **candy);
+void draw_candy(t_pos *candy);
 
 void clear_candy(const t_pos *candy);
 
