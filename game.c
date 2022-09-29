@@ -118,15 +118,7 @@ static void move_snake(t_snake *snake, int snake_length)
 
 static void grow() {
     // Ensure we have capacity to grow
-    if(game->snake_capacity <= game->snake_length)
-    {
-        unsigned int new_capacity = game->snake_capacity * 2;
-        t_snake *new_snake = (t_snake *)realloc(game->snake, sizeof(t_snake) * new_capacity);
-        assert(new_snake);
-
-        game->snake_capacity = new_capacity;
-        game->snake = new_snake;
-    }
+    assert(game->snake_length < game->snake_capacity);
 
     t_snake *tail = &game->snake[game->snake_length];
 
