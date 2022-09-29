@@ -35,21 +35,15 @@ void draw_frame(int width, int height)
 
 void draw_snake(const t_snake *snake)
 {
-    if (snake->next)
-    {
-        printf("\033[%d;%dH\033[42m \033[0m", snake->next->pos.row, snake->next->pos.col);
-    }
-
-    printf("\033[%d;%dH\033[102;30m \033[0m", snake->pos.row, snake->pos.col);
+    printf("\033[%d;%dH\033[42m \033[0m", snake[1].pos.row, snake[1].pos.col);
+    printf("\033[%d;%dH\033[102;30m \033[0m", snake[0].pos.row, snake[0].pos.col);
 }
 
-void clear_snake(const t_snake *snake)
+void clear_snake(const t_snake *snake, int snake_length)
 {
     // Only necessary to clear tail
-    while (snake->next != NULL)
-        snake = snake->next;
-
-    printf("\033[%d;%dH ", snake->pos.row, snake->pos.col);
+    const t_snake *s = &snake[snake_length-1];
+    printf("\033[%d;%dH ", s->pos.row, s->pos.col);
 }
 
 void draw_candy(t_pos *candy)
