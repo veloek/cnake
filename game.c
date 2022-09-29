@@ -25,27 +25,20 @@ static int highscore;
 
 static void initialize()
 {
+    game->snake_length = 2;
+
     // Create snake at the center
     t_pos center;
     center.col = game->w_width / 2;
     center.row = game->w_height / 2;
-    game->snake = (t_snake*)malloc(sizeof(t_snake));
-    assert(game->snake);
-    game->snake->pos = center;
-    game->snake->dir = LEFT;
+    game->snake[0].pos = center;
+    game->snake[0].dir = LEFT;
 
-    t_pos body_pos;
-    body_pos.row = game->snake->pos.row;
-    body_pos.col = game->snake->pos.col + 1;
-    t_snake *body = (t_snake*)malloc(sizeof(t_snake));
-    assert(body);
-    body->pos = body_pos;
-    body->next = NULL;
-    game->snake->next = body;
+    game->snake[1].pos.row = game->snake[0].pos.row;
+    game->snake[1].pos.col = game->snake[0].pos.col + 1;
+    game->snake[1].dir = LEFT;
 
     // Bucket of candy
-    game->candy = (t_pos*)malloc(sizeof(t_pos) * N_CANDY);
-    assert(game->candy);
     for (int i = 0; i < N_CANDY; i++)
     {
         game->candy[i].row = 0;
@@ -54,20 +47,6 @@ static void initialize()
     game->speed = 1;
     game->points = 0;
     game->is_paused = 0;
-}
-
-static void free_snake(t_snake *snake)
-{
-    if (snake->next != NULL)
-        free_snake(snake->next);
-
-    free(snake);
-}
-
-static void destroy()
-{
-    free_snake(game->snake);
-    free(game->candy);
 }
 
 static void handle_input()
@@ -112,83 +91,77 @@ static void handle_input()
     }
 }
 
-static void move_snake(t_snake *snake, const t_snake *prev)
+static void move_snake(t_snake *snake, int snake_length)
 {
-    // Recursive move to start with tail
-    if (snake->next != NULL)
-        move_snake(snake->next, snake);
-
-    // Move part to position of prev
-    if (prev != NULL) {
-        snake->pos.row = prev->pos.row;
-        snake->pos.col = prev->pos.col;
-        return;
+    for(int i=snake_length-1; i>0; --i)
+    {
+        snake[i].pos = snake[i-1].pos;
     }
 
     // Move head in set direction
-    switch (snake->dir)
+    switch (snake[0].dir)
     {
         case LEFT:
-            snake->pos.col--;
+            snake[0].pos.col--;
             break;
         case RIGHT:
-            snake->pos.col++;
+            snake[0].pos.col++;
             break;
         case UP:
-            snake->pos.row--;
+            snake[0].pos.row--;
             break;
         case DOWN:
-            snake->pos.row++;
+            snake[0].pos.row++;
             break;
     }
 }
 
 static void grow() {
-    t_snake *tail = game->snake->next;
-    while (tail->next != NULL)
-        tail = tail->next;
+    // Ensure we have capacity to grow
+    assert(game->snake_length < game->snake_capacity);
+
+    t_snake *tail = &game->snake[game->snake_length];
 
     t_pos new_pos;
     new_pos.row = tail->pos.row;
     new_pos.col = tail->pos.col;
-    t_snake *new_tail = (t_snake*)malloc(sizeof(t_snake));
-    assert(new_tail);
-    new_tail->pos = new_pos;
-    new_tail->next = NULL;
-    tail->next = new_tail;
+    tail->pos = new_pos;
+
+    game->snake_length++;
+}
+
+static inline t_bool t_pos_equals(const t_pos *a, const t_pos *b)
+{
+    return (a->row == b->row && a->col == b->col);
 }
 
 static void handle_collision()
 {
     // Check if snake is hitting any walls
-    if (game->snake->pos.col <= 1 ||
-        game->snake->pos.col >= game->w_width ||
-        game->snake->pos.row <= 1 ||
-        game->snake->pos.row >= game->w_height)
+    if (game->snake[0].pos.col <= 1 ||
+        game->snake[0].pos.col >= game->w_width ||
+        game->snake[0].pos.row <= 1 ||
+        game->snake[0].pos.row >= game->w_height)
     {
         debug("hit wall\n");
         game->should_restart = 1;
     }
 
     // Check if snake it hitting itself
-    t_snake *body = game->snake->next;
-    do
+    for(int i=1; i<game->snake_length; i++)
     {
-        if (game->snake->pos.col == body->pos.col &&
-            game->snake->pos.row == body->pos.row)
+        if (t_pos_equals(&game->snake[0].pos, &game->snake[i].pos))
         {
             debug("hit body\n");
             game->should_restart = 1;
             break;
         }
     }
-    while ((body = body->next) != NULL);
 
     // Check if snake is eating any candy
     for (int i=0; i < N_CANDY; i++)
     {
-        if (game->snake->pos.col == game->candy[i].col &&
-            game->snake->pos.row == game->candy[i].row)
+        if (t_pos_equals(&game->snake[0].pos, &game->candy[i]))
         {
             debug("eat candy\n");
             game->candy[i].row = 0;
@@ -240,9 +213,9 @@ static void update()
 
     debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
 
-    clear_snake(game->snake);
+    clear_snake(game->snake, game->snake_length);
     clear_statusbar(game->w_height + 1);
-    move_snake(game->snake, NULL);
+    move_snake(game->snake, game->snake_length);
     handle_collision();
     create_candy();
 
@@ -288,8 +261,6 @@ static void start()
                                game->points, highscore, game->is_paused);
             }
 
-            destroy();
-
             t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
             draw_game_over(&center);
             usleep(SECOND_IN_MIKROS);
@@ -320,8 +291,28 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 
     highscore = 0;
 
-    game = (t_game*)malloc(sizeof(t_game));
-    assert(game);
+    /*
+     * In order to get only a single memory allocation, we
+     * compute the amount of memory needed here, and do a
+     * single call to malloc. The memory needed is the size
+     * of the t_game struct, as well as memory for all the
+     * snake body positions.
+     * Reducing the calls to (m/c/re)alloc reduces the number
+     * of syscalls we produce, the number of possible error
+     * locations in our code, simplifies freeing and cleaning
+     * up, as well as packing all of our data tightly in memory,
+     * which is good for cache locality and the memory bus.
+     */
+    int max_snake_length = (rows-2) * (cols-2);
+    unsigned int game_memory_size = sizeof(t_game) +
+        max_snake_length * sizeof(t_snake);
+    unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
+    assert(game_memory);
+    debug("Allocated %u kB of memory for the game.\n", game_memory_size >> 10);
+
+    game = (t_game*)game_memory;
+    game->snake = (t_snake *)(game_memory + sizeof(t_game));
+    game->snake_capacity = max_snake_length;
     game->w_width = cols;
     game->w_height = rows - 1;
     game->start = &start;
