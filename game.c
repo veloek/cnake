@@ -55,7 +55,6 @@ static void initialize()
 static void destroy()
 {
     free(game->snake);
-    free(game->candy);
 }
 
 static void handle_input()
