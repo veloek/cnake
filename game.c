@@ -291,11 +291,24 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 
     highscore = 0;
 
+    /*
+     * In order to get only a single memory allocation, we
+     * compute the amount of memory needed here, and do a
+     * single call to malloc. The memory needed is the size
+     * of the t_game struct, as well as memory for all the
+     * snake body positions.
+     * Reducing the calls to (m/c/re)alloc reduces the number
+     * of syscalls we produce, the number of possible error
+     * locations in our code, simplifies freeing and cleaning
+     * up, as well as packing all of our data tightly in memory,
+     * which is good for cache locality and the memory bus.
+     */
     int max_snake_length = (rows-2) * (cols-2);
-    unsigned char *game_memory =
-        (unsigned char *)malloc(sizeof(t_game) +
-        max_snake_length * sizeof(t_snake));
+    unsigned int game_memory_size = sizeof(t_game) +
+        max_snake_length * sizeof(t_snake);
+    unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
     assert(game_memory);
+    debug("Allocated %u kB of memory for the game.\n", game_memory_size);
 
     game = (t_game*)game_memory;
     game->snake = (t_snake *)(game_memory + sizeof(t_game));
