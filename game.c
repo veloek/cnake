@@ -308,7 +308,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
         max_snake_length * sizeof(t_snake);
     unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
     assert(game_memory);
-    debug("Allocated %u kB of memory for the game.\n", game_memory_size);
+    debug("Allocated %u kB of memory for the game.\n", game_memory_size >> 10);
 
     game = (t_game*)game_memory;
     game->snake = (t_snake *)(game_memory + sizeof(t_game));
