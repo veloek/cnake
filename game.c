@@ -25,7 +25,7 @@ static int highscore;
 
 static void initialize()
 {
-    game->snake = (t_snake*)calloc(sizeof(t_snake), 2);
+    game->snake = (t_snake*)calloc(2, sizeof(t_snake));
     assert(game->snake);
     game->snake_length = 2;
     game->snake_capacity = 2;
