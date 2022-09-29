@@ -42,8 +42,6 @@ static void initialize()
     game->snake[1].dir = LEFT;
 
     // Bucket of candy
-    game->candy = (t_pos*)malloc(sizeof(t_pos) * N_CANDY);
-    assert(game->candy);
     for (int i = 0; i < N_CANDY; i++)
     {
         game->candy[i].row = 0;

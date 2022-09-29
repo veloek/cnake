@@ -25,7 +25,7 @@ typedef struct {
     t_snake *snake;
     unsigned int snake_length;
     unsigned int snake_capacity;
-    t_pos *candy;
+    t_pos candy[N_CANDY];
     unsigned short w_width;
     unsigned short w_height;
     t_bool is_running;
