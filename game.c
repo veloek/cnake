@@ -25,10 +25,7 @@ static int highscore;
 
 static void initialize()
 {
-    game->snake = (t_snake*)calloc(2, sizeof(t_snake));
-    assert(game->snake);
     game->snake_length = 2;
-    game->snake_capacity = 2;
 
     // Create snake at the center
     t_pos center;
@@ -54,7 +51,6 @@ static void initialize()
 
 static void destroy()
 {
-    free(game->snake);
 }
 
 static void handle_input()
@@ -309,8 +305,15 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 
     highscore = 0;
 
-    game = (t_game*)malloc(sizeof(t_game));
-    assert(game);
+    int max_snake_length = (rows-2) * (cols-2);
+    unsigned char *game_memory =
+        (unsigned char *)malloc(sizeof(t_game) +
+        max_snake_length * sizeof(t_snake));
+    assert(game_memory);
+
+    game = (t_game*)game_memory;
+    game->snake = (t_snake *)(game_memory + sizeof(t_game));
+    game->snake_capacity = max_snake_length;
     game->w_width = cols;
     game->w_height = rows - 1;
     game->start = &start;
