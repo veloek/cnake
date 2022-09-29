@@ -49,10 +49,6 @@ static void initialize()
     game->is_paused = 0;
 }
 
-static void destroy()
-{
-}
-
 static void handle_input()
 {
     e_input input = read_input();
@@ -272,8 +268,6 @@ static void start()
                 draw_statusbar(game->w_height + 1, game->speed,
                                game->points, highscore, game->is_paused);
             }
-
-            destroy();
 
             t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
             draw_game_over(&center);
