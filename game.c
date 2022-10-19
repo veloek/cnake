@@ -230,8 +230,15 @@ static void clear_and_count_down()
     draw_frame(game->w_width, game->w_height);
     for (int i = 3; i > 0 && game->is_running; i--)
     {
+        for (int j = 0; j < 5; j++)
+        {
+            handle_input();
+            if (!game->is_running)
+                break;
+
+            usleep(200 * MILLI_IN_MICROS);
+        }
         draw_count_down(&game->snake->pos, i);
-        usleep(SECOND_IN_MICROS);
     }
 }
 
