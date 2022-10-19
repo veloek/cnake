@@ -9,8 +9,8 @@
 #include <stdio.h> // putchar
 #include <assert.h> // assert
 
-#define SECOND_IN_MIKROS 1000000
-#define MILLI_IN_MIKROS 1000
+#define SECOND_IN_MICROS 1000000
+#define MILLI_IN_MICROS 1000
 
 // Get random number between [min, max)
 static int rand_int(int min, int max)
@@ -231,7 +231,7 @@ static void clear_and_count_down()
     for (int i = 3; i > 0 && game->is_running; i--)
     {
         draw_count_down(&game->snake->pos, i);
-        usleep(SECOND_IN_MIKROS);
+        usleep(SECOND_IN_MICROS);
     }
 }
 
@@ -263,7 +263,7 @@ static void start()
 
             t_pos center = {.col = game->w_width / 2, .row = game->w_height / 2};
             draw_game_over(&center);
-            usleep(SECOND_IN_MIKROS);
+            usleep(SECOND_IN_MICROS);
 
             initialize();
             clear_and_count_down();
@@ -275,7 +275,7 @@ static void start()
         // the snake appears to move faster in vertical direction).
         float speed_factor =
             game->snake->dir == UP || game->snake->dir == DOWN ? 1.5 : 2;
-        usleep(200 * (MILLI_IN_MIKROS) / (game->speed * speed_factor));
+        usleep(200 * (MILLI_IN_MICROS) / (game->speed * speed_factor));
     }
 }
 
