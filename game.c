@@ -148,7 +148,7 @@ static void handle_collision()
     }
 
     // Check if snake it hitting itself
-    for(int i=1; i<game->snake_length; i++)
+    for(int i = 1; i < game->snake_length; i++)
     {
         if (t_pos_equals(&game->snake[0].pos, &game->snake[i].pos))
         {
@@ -159,7 +159,7 @@ static void handle_collision()
     }
 
     // Check if snake is eating any candy
-    for (int i=0; i < N_CANDY; i++)
+    for (int i = 0; i < N_CANDY; i++)
     {
         if (t_pos_equals(&game->snake[0].pos, &game->candy[i]))
         {
@@ -171,6 +171,25 @@ static void handle_collision()
     }
 }
 
+static t_bool t_pos_is_taken(const t_pos *pos)
+{
+    // Snake
+    for (int i = 0; i < game->snake_length; i++)
+    {
+        if (t_pos_equals(pos, &game->snake[i].pos))
+            return 1;
+    }
+
+    // Candy
+    for (int i = 0; i < N_CANDY; i++)
+    {
+        if (t_pos_equals(pos, &game->candy[i]))
+            return 1;
+    }
+
+    return 0;
+}
+
 static void create_candy()
 {
     int activeCandy = 0;
@@ -180,21 +199,34 @@ static void create_candy()
             activeCandy++;
     }
 
+    // Return early if there's no room for more candy
+    if (activeCandy == N_CANDY)
+        return;
+
     // Create candy randomly, less often the more candy is available.
     int r = rand_int(0, 20 * activeCandy);
-    if (r != 0 || activeCandy == N_CANDY) return;
+    if (r != 0)
+        return;
+
+
+    // Find available space for the new candy
+    t_pos pos;
+    do
+    {
+        // Find a random position within the bounds of the frame
+        pos.col = rand_int(2, game->w_width - 2);
+        pos.row = rand_int(2, game->w_height - 2);
+    }
+    while (t_pos_is_taken(&pos));
 
     for (int i = 0; i < N_CANDY; i++)
     {
         // Find a free "spot"
         if (game->candy[i].row == 0)
         {
-            // Find a random position within the bounds of the frame
-            int col = rand_int(2, game->w_width - 2);
-            int row = rand_int(2, game->w_height - 2);
-            debug("adding candy[%d] at %d,%d\n", i, col, row);
-            game->candy[i].col = col;
-            game->candy[i].row = row;
+            debug("adding candy[%d] at %d,%d\n", i, pos.col, pos.row);
+            game->candy[i].col = pos.col;
+            game->candy[i].row = pos.row;
 
             break;
         }
