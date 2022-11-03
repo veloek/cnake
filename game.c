@@ -21,7 +21,7 @@ static int rand_int(int min, int max)
 
 static t_game *game;
 
-static int highscore;
+static unsigned int highscore;
 
 static void initialize()
 {
@@ -148,7 +148,7 @@ static void handle_collision()
     }
 
     // Check if snake it hitting itself
-    for(int i = 1; i < game->snake_length; i++)
+    for(unsigned int i = 1; i < game->snake_length; i++)
     {
         if (t_pos_equals(&game->snake[0].pos, &game->snake[i].pos))
         {
@@ -174,7 +174,7 @@ static void handle_collision()
 static t_bool t_pos_is_taken(const t_pos *pos)
 {
     // Snake
-    for (int i = 0; i < game->snake_length; i++)
+    for (unsigned int i = 0; i < game->snake_length; i++)
     {
         if (t_pos_equals(pos, &game->snake[i].pos))
             return 1;
