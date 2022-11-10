@@ -7,21 +7,11 @@
 #include <stdio.h> // fprintf
 #include <stdlib.h> // exit
 
-void get_winsize(struct winsize *size)
-{
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, size) == -1)
-    {
-        fprintf(stderr, "error: failed to get term size\n");
-        exit(-1);
-    }
-}
+static t_game *game;
 
-void on_resize()
-{
-    struct winsize size;
-    get_winsize(&size);
-    fprintf(stderr, "RESIZE: %d x %d\n", size.ws_col, size.ws_row);
-}
+static void get_winsize(struct winsize *size);
+
+static void on_resize();
 
 int main()
 {
@@ -29,9 +19,10 @@ int main()
     struct winsize size;
     get_winsize(&size);
 
+    // Hide cursor and configure input
     term_setup();
 
-    t_game *game = new_game(size.ws_row, size.ws_col);
+    game = new_game(size.ws_row, size.ws_col);
 
     // Catch sigterm and stop loop
     signal(SIGINT, game->stop);
@@ -41,4 +32,20 @@ int main()
     game->start();
 
     term_cleanup();
+}
+
+static void get_winsize(struct winsize *size)
+{
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, size) == -1)
+    {
+        fprintf(stderr, "error: failed to get term size\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+static void on_resize()
+{
+    struct winsize size;
+    get_winsize(&size);
+    game->resize(size.ws_row, size.ws_col);
 }

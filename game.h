@@ -36,6 +36,7 @@ typedef struct {
 
     void (*start)();
     void (*stop)();
+    void (*resize)(unsigned short rows, unsigned short cols);
 } t_game;
 
 t_game *new_game(unsigned short rows, unsigned short cols);

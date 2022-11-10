@@ -323,8 +323,17 @@ static void stop()
     game->is_running = 0;
 }
 
+static void resize(unsigned short rows, unsigned short cols)
+{
+    debug("window resize: %dx%d\n", cols, rows);
+
+    debug("TODO: Update game width/height and realloc game memory\n");
+}
+
 t_game* new_game(unsigned short rows, unsigned short cols)
 {
+    debug("creating game with window size: %dx%d\n", cols, rows);
+
     // Initialize random number generator with a unique seed
     srand(time(NULL));
 
@@ -347,7 +356,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
         max_snake_length * sizeof(t_snake);
     unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
     assert(game_memory);
-    debug("Allocated %u kB of memory for the game.\n", game_memory_size >> 10);
+    debug("allocated %u kB of memory for the game\n", game_memory_size >> 10);
 
     game = (t_game*)game_memory;
     game->snake = (t_snake *)(game_memory + sizeof(t_game));
@@ -356,6 +365,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     game->w_height = rows - 1;
     game->start = &start;
     game->stop = &stop;
+    game->resize = &resize;
 
     return game;
 }
