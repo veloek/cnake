@@ -327,7 +327,19 @@ static void resize(unsigned short rows, unsigned short cols)
 {
     debug("window resize: %dx%d\n", cols, rows);
 
-    debug("TODO: Update game width/height and realloc game memory\n");
+    int max_snake_length = (rows-2) * (cols-2);
+    game->snake = (t_snake*)realloc(game->snake,
+            max_snake_length * sizeof(t_snake));
+    assert(game->snake);
+
+    game->snake_capacity = max_snake_length;
+    game->w_width = cols;
+    game->w_height = rows - 1;
+
+    clear_screen();
+    draw_frame(game->w_width, game->w_height);
+    draw_candy(game->candy);
+    draw_full_snake(game->snake, game->snake_length);
 }
 
 t_game* new_game(unsigned short rows, unsigned short cols)
@@ -339,27 +351,13 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 
     highscore = 0;
 
-    /*
-     * In order to get only a single memory allocation, we
-     * compute the amount of memory needed here, and do a
-     * single call to malloc. The memory needed is the size
-     * of the t_game struct, as well as memory for all the
-     * snake body positions.
-     * Reducing the calls to (m/c/re)alloc reduces the number
-     * of syscalls we produce, the number of possible error
-     * locations in our code, simplifies freeing and cleaning
-     * up, as well as packing all of our data tightly in memory,
-     * which is good for cache locality and the memory bus.
-     */
-    int max_snake_length = (rows-2) * (cols-2);
-    unsigned int game_memory_size = sizeof(t_game) +
-        max_snake_length * sizeof(t_snake);
-    unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
-    assert(game_memory);
-    debug("allocated %u kB of memory for the game\n", game_memory_size >> 10);
+    game = (t_game*)malloc(sizeof(t_game));
+    assert(game);
 
-    game = (t_game*)game_memory;
-    game->snake = (t_snake *)(game_memory + sizeof(t_game));
+    int max_snake_length = (rows-2) * (cols-2);
+    game->snake = (t_snake*)malloc(max_snake_length * sizeof(t_snake));
+    assert(game->snake);
+
     game->snake_capacity = max_snake_length;
     game->w_width = cols;
     game->w_height = rows - 1;
@@ -368,4 +366,10 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     game->resize = &resize;
 
     return game;
+}
+
+void free_game(t_game *game)
+{
+    free(game->snake);
+    free(game);
 }

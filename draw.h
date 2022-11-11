@@ -9,7 +9,9 @@ void draw_frame(int width, int height);
 
 void draw_snake(const t_snake *snake);
 
-void clear_snake(const t_snake *snake, int snake_length);
+void draw_full_snake(const t_snake *snake, unsigned int snake_length);
+
+void clear_snake(const t_snake *snake, unsigned int snake_length);
 
 void draw_candy(t_pos *candy);
 

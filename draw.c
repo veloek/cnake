@@ -39,7 +39,19 @@ void draw_snake(const t_snake *snake)
     printf("\033[%d;%dH\033[102;30m \033[0m", snake[0].pos.row, snake[0].pos.col);
 }
 
-void clear_snake(const t_snake *snake, int snake_length)
+void draw_full_snake(const t_snake *snake, unsigned int snake_length)
+{
+    while (--snake_length > 0)
+    {
+        printf("\033[%d;%dH\033[42m \033[0m",
+                snake[snake_length].pos.row,
+                snake[snake_length].pos.col);
+    }
+
+    printf("\033[%d;%dH\033[102;30m \033[0m", snake[0].pos.row, snake[0].pos.col);
+}
+
+void clear_snake(const t_snake *snake, unsigned int snake_length)
 {
     // Only necessary to clear tail
     const t_snake *s = &snake[snake_length-1];

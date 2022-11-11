@@ -40,5 +40,6 @@ typedef struct {
 } t_game;
 
 t_game *new_game(unsigned short rows, unsigned short cols);
+void free_game(t_game *game);
 
 #endif

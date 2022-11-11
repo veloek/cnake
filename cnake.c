@@ -31,6 +31,8 @@ int main()
 
     game->start();
 
+    free_game(game);
+
     term_cleanup();
 }
 
