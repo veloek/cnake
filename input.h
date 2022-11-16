@@ -20,6 +20,6 @@ typedef enum {
     INPUT_QUIT,
 } e_input;
 
-e_input read_input();
+e_input input_read();
 
 #endif

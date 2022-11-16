@@ -51,7 +51,7 @@ static void initialize()
 
 static void handle_input()
 {
-    e_input input = read_input();
+    e_input input = input_read();
 
     switch (input)
     {

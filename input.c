@@ -20,14 +20,14 @@
 #define SPACE ' '
 #define ESC 0
 
-e_input read_input() {
+e_input input_read() {
     char buf[3]; int n;
     if ((n = read(0, buf, 3)) <= 0)
         return -1;
 
     char input = buf[0];
     if (input == '\33') // escape character (i.e. arrow keys)
-        input = buf[2]; // format: [\33, '[', 'A'|'B'|'C'|'D']
+        input = buf[2]; // format: ['\33', '[', 'A'|'B'|'C'|'D']
 
     switch (input)
     {
