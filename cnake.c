@@ -1,11 +1,14 @@
 #include "game.h"
 #include "term.h"
 
+#include <errno.h> // errno
+#include <fcntl.h> // open, O_NOCTTY, O_NONBLOCK
 #include <signal.h> // signal
-#include <sys/ioctl.h> // ioctl
-#include <unistd.h> // STDOUT_FILENO
 #include <stdio.h> // fprintf
 #include <stdlib.h> // exit
+#include <string.h> // strerror
+#include <sys/ioctl.h> // ioctl
+#include <unistd.h> // close
 
 static t_game *game;
 
@@ -38,9 +41,18 @@ int main()
 
 static void get_winsize(struct winsize *size)
 {
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, size) == -1)
+    int tty_fd = open("/dev/tty", O_NOCTTY | O_NONBLOCK);
+    if (tty_fd == -1)
     {
-        fprintf(stderr, "error: failed to get term size\n");
+        fprintf(stderr, "error: opening `/dev/tty` failed (%d): %s\n",
+                errno, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    if (ioctl(tty_fd, TIOCGWINSZ, size) == -1)
+    {
+        fprintf(stderr, "error: getting term size failed (%d): %s\n",
+                errno, strerror(errno));
         exit(EXIT_FAILURE);
     }
 }
