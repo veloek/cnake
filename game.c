@@ -1,7 +1,7 @@
 #include "game.h"
 #include "draw.h"
 #include "input.h"
-#include "debug.h"
+#include "log.h"
 
 #include <unistd.h> // usleep
 #include <stdlib.h> // malloc, rand, etc.
@@ -143,7 +143,7 @@ static void handle_collision()
         game->snake[0].pos.row <= 1 ||
         game->snake[0].pos.row >= game->w_height)
     {
-        debug("hit wall\n");
+        log_debug("hit wall\n");
         game->should_restart = 1;
     }
 
@@ -152,7 +152,7 @@ static void handle_collision()
     {
         if (t_pos_equals(&game->snake[0].pos, &game->snake[i].pos))
         {
-            debug("hit body\n");
+            log_debug("hit body\n");
             game->should_restart = 1;
             break;
         }
@@ -163,7 +163,7 @@ static void handle_collision()
     {
         if (t_pos_equals(&game->snake[0].pos, &game->candy[i]))
         {
-            debug("eat candy\n");
+            log_debug("eat candy\n");
             game->candy[i].row = 0;
             grow();
             game->points += game->speed * 10;
@@ -224,7 +224,7 @@ static void create_candy()
         // Find a free "spot"
         if (game->candy[i].row == 0)
         {
-            debug("adding candy[%d] at %d,%d\n", i, pos.col, pos.row);
+            log_debug("adding candy[%d] at %d,%d\n", i, pos.col, pos.row);
             game->candy[i].col = pos.col;
             game->candy[i].row = pos.row;
 
@@ -243,7 +243,7 @@ static void update()
         return;
     }
 
-    debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
+    log_debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
 
     clear_snake(game->snake, game->snake_length);
     clear_statusbar(game->w_height + 1);
@@ -325,7 +325,7 @@ static void stop()
 
 static void resize(unsigned short rows, unsigned short cols)
 {
-    debug("window resize: %dx%d\n", cols, rows);
+    log_debug("window resize: %dx%d\n", cols, rows);
 
     int max_snake_length = (rows-2) * (cols-2);
     game->snake = (t_snake*)realloc(game->snake,
@@ -344,7 +344,7 @@ static void resize(unsigned short rows, unsigned short cols)
 
 t_game* new_game(unsigned short rows, unsigned short cols)
 {
-    debug("creating game with window size: %dx%d\n", cols, rows);
+    log_debug("creating game with window size: %dx%d\n", cols, rows);
 
     // Initialize random number generator with a unique seed
     srand(time(NULL));

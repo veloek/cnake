@@ -4,5 +4,5 @@ cnake
 # object files
 *.o
 
-# debugging
-debug.out
+# logging
+cnake.log
