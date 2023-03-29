@@ -3,8 +3,6 @@
 #include <stdarg.h> // va_start, va_end
 #include <stdio.h> // fopen, fclose, vfprintf, etc
 
-#define FILENAME "debug.out"
-
 void debug(const char *format, ...)
 {
     if (!DEBUG_ENABLED)

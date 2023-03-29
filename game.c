@@ -93,7 +93,7 @@ static void handle_input()
 
 static void move_snake(t_snake *snake, int snake_length)
 {
-    for(int i=snake_length-1; i>0; --i)
+    for (int i=snake_length-1; i>0; --i)
     {
         snake[i].pos = snake[i-1].pos;
     }
@@ -192,19 +192,19 @@ static t_bool t_pos_is_taken(const t_pos *pos)
 
 static void create_candy()
 {
-    int activeCandy = 0;
+    int active_candy = 0;
     for (int i = 0; i < N_CANDY; i++)
     {
         if (game->candy[i].row > 0)
-            activeCandy++;
+            active_candy++;
     }
 
     // Return early if there's no room for more candy
-    if (activeCandy == N_CANDY)
+    if (active_candy == N_CANDY)
         return;
 
     // Create candy randomly, less often the more candy is available.
-    int r = rand_int(0, 20 * activeCandy);
+    int r = rand_int(0, 20 * active_candy);
     if (r != 0)
         return;
 

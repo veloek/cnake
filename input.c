@@ -3,24 +3,8 @@
 
 #include <unistd.h> // read
 
-#define NUM_1 '1'
-#define NUM_2 '2'
-#define NUM_3 '3'
-#define NUM_4 '4'
-#define NUM_5 '5'
-#define NUM_6 '6'
-#define NUM_7 '7'
-#define NUM_8 '8'
-#define NUM_9 '9'
-#define NUM_0 '0'
-#define ARROW_UP 'A'
-#define ARROW_DOWN 'B'
-#define ARROW_RIGHT 'C'
-#define ARROW_LEFT 'D'
-#define SPACE ' '
-#define ESC 0
-
-e_input read_input() {
+e_input read_input()
+{
     char buf[3]; int n;
     if ((n = read(0, buf, 3)) <= 0)
         return -1;

@@ -1,7 +1,7 @@
 #include "draw.h"
 #include "game.h"
 
-#include <stdio.h>
+#include <stdio.h> // printf
 
 void clear_screen()
 {
