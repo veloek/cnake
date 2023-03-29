@@ -327,6 +327,8 @@ static void resize(unsigned short rows, unsigned short cols)
 {
     log_debug("window resize: %dx%d\n", cols, rows);
 
+    game->is_paused = 1;
+
     int max_snake_length = (rows-2) * (cols-2);
     game->snake = (t_snake*)realloc(game->snake,
             max_snake_length * sizeof(t_snake));
