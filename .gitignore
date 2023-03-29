@@ -6,3 +6,6 @@ cnake
 
 # debugging
 debug.out
+
+# highscore
+highscore.dat

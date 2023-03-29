@@ -2,6 +2,7 @@
 #include "draw.h"
 #include "input.h"
 #include "debug.h"
+#include "highscore.h"
 
 #include <unistd.h> // usleep
 #include <stdlib.h> // malloc, rand, etc.
@@ -295,7 +296,7 @@ static void start()
 
             if (game->points > highscore)
             {
-                highscore = game->points;
+                highscore_update(highscore = game->points);
                 draw_statusbar(game->w_height + 1, game->speed,
                                game->points, highscore, game->is_paused);
             }
@@ -316,6 +317,12 @@ static void start()
             game->snake->dir == UP || game->snake->dir == DOWN ? 1.5 : 2;
         usleep(200 * (MILLI_IN_MICROS) / (game->speed * speed_factor));
     }
+
+    // Save highscore before exiting
+    if (game->points > highscore)
+    {
+        highscore_update(game->points);
+    }
 }
 
 static void stop()
@@ -328,7 +335,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
     // Initialize random number generator with a unique seed
     srand(time(NULL));
 
-    highscore = 0;
+    highscore = highscore_init();
 
     /*
      * In order to get only a single memory allocation, we
