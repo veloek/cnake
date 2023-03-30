@@ -46,7 +46,7 @@ void highscore_update(int highscore)
     }
 
     char buffer[64];
-    itoa(highscore, buffer, 64);
+    util_itoa(highscore, buffer, sizeof(buffer));
     int n = fwrite(buffer, sizeof(char), strlen(buffer), highscore_file);
     if (n <= 0)
     {

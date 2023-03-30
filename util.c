@@ -1,22 +1,20 @@
 #include "util.h"
 
-#include <stdlib.h> // abs
-
-int itoa(int n, char* dst, int len)
+int util_itoa(int num, char* dst, int size)
 {
     // Return early for 0
-    if (n == 0 && len >= 2)
+    if (num == 0 && size >= 2)
     {
         dst[0] = '0';
         dst[1] = '\0';
         return 1;
     }
 
-    // Return early if there's no room for digits
-    if (len < 2)
+    // Return early if there's no room in dst
+    if (size < 2)
     {
         // Terminate string if there's room
-        if (len == 1)
+        if (size == 1)
             dst[0] = '\0';
 
         return 0;
@@ -24,32 +22,33 @@ int itoa(int n, char* dst, int len)
 
     // Handle negative numbers by remembering the sign
     int negative = 0;
-    if (n < 0)
+    if (num < 0)
     {
         negative = 1;
-        n = abs(n);
+        num = -num;
     }
 
-    // Divide by 10 and place rest in array until 0
+    // Divide by 10 and place rest in buffer until 0
     int i = 0;
-    char buffer[64];
-    while (n > 0)
+    char buf[11]; // Room to hold the largest integer incl. sign
+    while (num > 0)
     {
-        buffer[i++] = '0' + (n % 10);
-        n /= 10;
+        buf[i++] = '0' + (num % 10);
+        num /= 10;
     }
-    buffer[i] = '\0';
 
-    // Append sign and reverse array
-    int j = 0;
+    // Append sign if negative
     if (negative)
-        dst[j++] = '-';
+        buf[i++] = '-';
 
-    for (int k = i - 1; k >= 0 && j < len - 1; k--)
+    // Reverse array into dst
+    int j = 0;
+    while (j < i && j < size - 1)
     {
-        dst[j++] = buffer[k];
+        char c = buf[i - 1 - j];
+        dst[j++] = c;
     }
     dst[j] = '\0';
 
-    return i;
+    return j;
 }
