@@ -38,6 +38,12 @@ unsigned int highscore_init()
 
 void highscore_update(unsigned int highscore)
 {
+    // Read highscore again to make sure we're not
+    // overwriting a higher score.
+    unsigned int old_score = highscore_init();
+    if (highscore <= old_score)
+        return;
+
     FILE* highscore_file = fopen(HIGHSCORE_FILE, "w");
 
     if (highscore_file == NULL)
