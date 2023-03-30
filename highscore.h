@@ -3,7 +3,7 @@
 
 #define HIGHSCORE_FILE "highscore.dat"
 
-int highscore_init();
-void highscore_update(int highscore);
+unsigned int highscore_init();
+void highscore_update(unsigned int highscore);
 
 #endif

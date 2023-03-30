@@ -7,7 +7,7 @@
 #include <errno.h> // errno
 #include <string.h> //strerror, strlen
 
-int highscore_init()
+unsigned int highscore_init()
 {
     FILE* highscore_file = fopen(HIGHSCORE_FILE, "r");
 
@@ -28,13 +28,15 @@ int highscore_init()
     }
 
     int highscore = atoi(buffer);
+    if (highscore < 0)
+        highscore = 0;
 
     fclose(highscore_file);
 
     return highscore;
 }
 
-void highscore_update(int highscore)
+void highscore_update(unsigned int highscore)
 {
     FILE* highscore_file = fopen(HIGHSCORE_FILE, "w");
 
