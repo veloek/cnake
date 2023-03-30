@@ -26,6 +26,8 @@ static unsigned int highscore;
 
 static void initialize()
 {
+    highscore = highscore_init();
+
     game->snake_length = 2;
 
     // Create snake at the center
@@ -334,8 +336,6 @@ t_game* new_game(unsigned short rows, unsigned short cols)
 {
     // Initialize random number generator with a unique seed
     srand(time(NULL));
-
-    highscore = highscore_init();
 
     /*
      * In order to get only a single memory allocation, we
