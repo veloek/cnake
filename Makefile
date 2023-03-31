@@ -1,5 +1,6 @@
 CC=gcc
-CFLAGS=-I. -Wall -Wextra
+VERSION=$(shell git describe --tags)
+CFLAGS=-I. -Wall -Wextra -DVERSION=\"$(VERSION)\"
 LDFLAGS=
 
 HEADERS=$(wildcard *.h)
