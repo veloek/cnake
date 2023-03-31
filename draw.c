@@ -2,6 +2,11 @@
 #include "game.h"
 
 #include <stdio.h> // printf
+#include <strings.h> // strlen
+
+#ifndef VERSION
+#define VERSION "N/A"
+#endif
 
 void clear_screen()
 {
@@ -29,6 +34,11 @@ void draw_frame(int width, int height)
         // Right column
         printf("\033[%d;%dH ", i, width);
     }
+
+    // Print version in header
+    char header[] = "CNAKE VERSION ";
+    int header_pos = width / 2 - (strlen(header) + strlen(VERSION) + 2) / 2;
+    printf("\033[90;40m\033[0;%dH %s%s ", header_pos, header, VERSION);
 
     printf("\033[0m");
 }
