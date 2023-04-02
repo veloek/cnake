@@ -10,7 +10,7 @@ exit
 #include "util.h"
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #define INT_MAX  2147483647
 #define INT_MIN -2147483648

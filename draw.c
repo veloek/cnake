@@ -2,7 +2,7 @@
 #include "game.h"
 
 #include <stdio.h> // printf
-#include <strings.h> // strlen
+#include <string.h> // strlen
 
 #ifndef VERSION
 #define VERSION "N/A"
