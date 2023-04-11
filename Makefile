@@ -1,5 +1,6 @@
 CC := gcc
 VERSION := $(shell git describe --tags)
+DEBUG ?= 0
 CFLAGS := -I. -Wall -Wextra -DVERSION=\"$(VERSION)\" -DDEBUG=$(DEBUG)
 LDFLAGS :=
 

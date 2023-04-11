@@ -13,7 +13,7 @@ unsigned int highscore_init()
 
     if (highscore_file == NULL)
     {
-        debug("Error opening highscore file %s: %s\n",
+        LOG("Error opening highscore file %s: %s\n",
                 HIGHSCORE_FILE, strerror(errno));
         return 0;
     }
@@ -22,7 +22,7 @@ unsigned int highscore_init()
     int n = fread(buffer, sizeof(char), sizeof(buffer), highscore_file);
     if (n <= 0)
     {
-        debug("Error reading highscore file %s: %s\n",
+        LOG("Error reading highscore file %s: %s\n",
                 HIGHSCORE_FILE, strerror(errno));
         return 0;
     }
@@ -48,7 +48,7 @@ void highscore_update(unsigned int highscore)
 
     if (highscore_file == NULL)
     {
-        debug("Error opening highscore file %s: %s\n",
+        LOG("Error opening highscore file %s: %s\n",
                 HIGHSCORE_FILE, strerror(errno));
         return;
     }
@@ -58,7 +58,7 @@ void highscore_update(unsigned int highscore)
     int n = fwrite(buffer, sizeof(char), strlen(buffer), highscore_file);
     if (n <= 0)
     {
-        debug("Error writing highscore file %s: %s\n",
+        LOG("Error writing highscore file %s: %s\n",
                 HIGHSCORE_FILE, strerror(errno));
         return;
     }

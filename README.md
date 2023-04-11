@@ -14,6 +14,8 @@ Tested on GNU/Linux, macOS and WSL and it works surprisingly well.
 $ make && ./cnake
 ```
 
+To build a debug version that logs to debug.out, run `make DEBUG=1`.
+
 Use h, j, k and l to move around, just like in [Vim](https://www.vim.org).
 Arrow keys are also supported, if you prefer that.
 

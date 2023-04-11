@@ -146,7 +146,7 @@ static void handle_collision()
         game->snake[0].pos.row <= 1 ||
         game->snake[0].pos.row >= game->w_height)
     {
-        debug("hit wall\n");
+        LOG("hit wall\n");
         game->should_restart = 1;
     }
 
@@ -155,7 +155,7 @@ static void handle_collision()
     {
         if (t_pos_equals(&game->snake[0].pos, &game->snake[i].pos))
         {
-            debug("hit body\n");
+            LOG("hit body\n");
             game->should_restart = 1;
             break;
         }
@@ -166,7 +166,7 @@ static void handle_collision()
     {
         if (t_pos_equals(&game->snake[0].pos, &game->candy[i]))
         {
-            debug("eat candy\n");
+            LOG("eat candy\n");
             game->candy[i].row = 0;
             grow();
             game->points += game->speed * 10;
@@ -227,7 +227,7 @@ static void create_candy()
         // Find a free "spot"
         if (game->candy[i].row == 0)
         {
-            debug("adding candy[%d] at %d,%d\n", i, pos.col, pos.row);
+            LOG("adding candy[%d] at %d,%d\n", i, pos.col, pos.row);
             game->candy[i].col = pos.col;
             game->candy[i].row = pos.row;
 
@@ -246,7 +246,7 @@ static void update()
         return;
     }
 
-    debug("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
+    LOG("snake pos: %d, %d\n", game->snake->pos.col, game->snake->pos.row);
 
     clear_snake(game->snake, game->snake_length);
     clear_statusbar(game->w_height + 1);
@@ -354,7 +354,7 @@ t_game* new_game(unsigned short rows, unsigned short cols)
         max_snake_length * sizeof(t_snake);
     unsigned char *game_memory = (unsigned char *)malloc(game_memory_size);
     assert(game_memory);
-    debug("Allocated %u kB of memory for the game.\n", game_memory_size >> 10);
+    LOG("Allocated %u kB of memory for the game.\n", game_memory_size >> 10);
 
     game = (t_game*)game_memory;
     game->snake = (t_snake *)(game_memory + sizeof(t_game));
