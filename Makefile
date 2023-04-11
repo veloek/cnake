@@ -1,11 +1,11 @@
-CC=gcc
-VERSION=$(shell git describe --tags)
-CFLAGS=-I. -Wall -Wextra -DVERSION=\"$(VERSION)\"
-LDFLAGS=
+CC := gcc
+VERSION := $(shell git describe --tags)
+CFLAGS := -I. -Wall -Wextra -DVERSION=\"$(VERSION)\" -DDEBUG=$(DEBUG)
+LDFLAGS :=
 
-HEADERS=$(wildcard *.h)
-SRC=$(filter-out %_test.c,$(wildcard *.c))
-OBJ=$(SRC:%.c=%.o)
+HEADERS := $(wildcard *.h)
+SRC := $(filter-out %_test.c,$(wildcard *.c))
+OBJ := $(SRC:%.c=%.o)
 
 .PHONY: all clean
 
