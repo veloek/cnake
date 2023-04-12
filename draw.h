@@ -3,6 +3,28 @@
 
 #include "game.h"
 
+enum color
+{
+    BLACK,
+    RED,
+    GREEN,
+    YELLOW,
+    BLUE,
+    MAGENTA,
+    CYAN,
+    WHITE,
+    DEFAULT,
+
+    BRIGHT_BLACK,
+    BRIGHT_RED,
+    BRIGHT_GREEN,
+    BRIGHT_YELLOW,
+    BRIGHT_BLUE,
+    BRIGHT_MAGENTA,
+    BRIGHT_CYAN,
+    BRIGHT_WHITE,
+};
+
 void clear_screen();
 
 void draw_frame(int width, int height);
