@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdbool.h> // bool
+
 #define N_CANDY 5
 
 typedef enum {
@@ -19,8 +21,6 @@ typedef struct t_snake {
     e_dir dir;
 } t_snake;
 
-typedef unsigned char t_bool;
-
 typedef struct {
     t_snake *snake;
     unsigned int snake_length;
@@ -28,11 +28,11 @@ typedef struct {
     t_pos candy[N_CANDY];
     unsigned short w_width;
     unsigned short w_height;
-    t_bool is_running;
-    t_bool is_paused;
+    bool is_running;
+    bool is_paused;
     unsigned char speed;
     unsigned int points;
-    t_bool should_restart;
+    bool should_restart;
 
     void (*start)();
     void (*stop)();

@@ -3,6 +3,8 @@
 
 #include "game.h"
 
+#include <stdbool.h>
+
 enum color
 {
     BLACK,
@@ -41,7 +43,7 @@ void draw_count_down(const t_pos *pos, int n);
 
 void draw_game_over(const t_pos *pos);
 
-void draw_statusbar(int row, char speed, int points, int highscore, t_bool is_paused);
+void draw_statusbar(int row, char speed, int points, int highscore, bool is_paused);
 
 void clear_statusbar(int row);
 

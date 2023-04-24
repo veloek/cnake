@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "highscore.h"
 
+#include <stdbool.h> // bool
 #include <unistd.h> // usleep
 #include <stdlib.h> // malloc, rand, etc.
 #include <time.h> // time
@@ -133,7 +134,7 @@ static void grow() {
     game->snake_length++;
 }
 
-static inline t_bool t_pos_equals(const t_pos *a, const t_pos *b)
+static inline bool t_pos_equals(const t_pos *a, const t_pos *b)
 {
     return (a->row == b->row && a->col == b->col);
 }
@@ -174,7 +175,7 @@ static void handle_collision()
     }
 }
 
-static t_bool t_pos_is_taken(const t_pos *pos)
+static bool t_pos_is_taken(const t_pos *pos)
 {
     // Snake
     for (unsigned int i = 0; i < game->snake_length; i++)

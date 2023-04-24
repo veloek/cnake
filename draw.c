@@ -1,6 +1,7 @@
 #include "draw.h"
 #include "game.h"
 
+#include <stdbool.h> // bool
 #include <stdio.h> // printf
 #include <string.h> // strlen
 
@@ -144,7 +145,7 @@ void draw_game_over(const t_pos *pos)
     reset_color();
 }
 
-void draw_statusbar(int row, char speed, int points, int highscore, t_bool is_paused)
+void draw_statusbar(int row, char speed, int points, int highscore, bool is_paused)
 {
     printf("\033[%d;1H", row);
     printf(" \033[4mSPEED\033[0m: %d", speed);
