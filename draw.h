@@ -5,7 +5,7 @@
 
 #include <stdbool.h>
 
-enum color
+typedef enum
 {
     BLACK,
     RED,
@@ -25,7 +25,7 @@ enum color
     BRIGHT_MAGENTA,
     BRIGHT_CYAN,
     BRIGHT_WHITE,
-};
+} e_color;
 
 void clear_screen();
 

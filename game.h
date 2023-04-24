@@ -16,7 +16,7 @@ typedef struct {
     unsigned short row, col;
 } t_pos;
 
-typedef struct t_snake {
+typedef struct {
     t_pos pos;
     e_dir dir;
 } t_snake;

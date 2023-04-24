@@ -31,17 +31,17 @@ static int colors[][2] =
     [BRIGHT_WHITE]   = { 97, 107 },
 };
 
-static void set_color(enum color fg, enum color bg)
+static void set_color(e_color fg, e_color bg)
 {
     printf("\033[%d;%dm", colors[fg][0], colors[bg][1]);
 }
 
-static void set_fg_color(enum color c)
+static void set_fg_color(e_color c)
 {
     printf("\033[%dm", colors[c][0]);
 }
 
-static void set_bg_color(enum color c)
+static void set_bg_color(e_color c)
 {
     printf("\033[%dm", colors[c][1]);
 }
