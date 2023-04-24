@@ -120,7 +120,8 @@ static void move_snake(t_snake *snake, int snake_length)
     }
 }
 
-static void grow() {
+static void grow()
+{
     // Ensure we have capacity to grow
     assert(game->snake_length < game->snake_capacity);
 

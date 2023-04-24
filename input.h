@@ -18,7 +18,8 @@
 #define SPACE ' '
 #define ESC 0
 
-typedef enum {
+typedef enum
+{
     INPUT_1,
     INPUT_2,
     INPUT_3,

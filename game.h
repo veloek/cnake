@@ -5,18 +5,21 @@
 
 #define N_CANDY 5
 
-typedef enum {
+typedef enum
+{
     LEFT,
     RIGHT,
     UP,
     DOWN
 } e_dir;
 
-typedef struct {
+typedef struct
+{
     unsigned short row, col;
 } t_pos;
 
-typedef struct {
+typedef struct
+{
     t_pos pos;
     e_dir dir;
 } t_snake;
